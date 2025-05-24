@@ -9,10 +9,10 @@ datasource db {
 
  model User {
   id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  clerkId         String    @unique
+  clerkId         String?    @unique
   firstName       String?
   lastName        String?
-  email           String    @unique
+  email           String 
   image           String?
   trial           Boolean   @default(false)
   studios         Media?
@@ -68,7 +68,7 @@ datasource db {
   id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name          String
   type          TYPE      @default(PERSONAL)
-  userId        String? @unique @db.Uuid 
+  userId        String?  @db.Uuid 
   user          User? @relation(fields: [userId], references: [id])
   folders       Folder[]
   videos        Video[]
@@ -81,7 +81,7 @@ datasource db {
  model Folder {
   id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name          String  @default("New Folder")
-  workSpaceId   String? @unique @db.Uuid 
+  workSpaceId   String? @db.Uuid 
   workSpace     WorkSpace? @relation(fields: [workSpaceId], references: [id])
   videos        Video[]
   createdAt     DateTime  @default(now())

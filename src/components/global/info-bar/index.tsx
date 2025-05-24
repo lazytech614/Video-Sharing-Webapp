@@ -12,7 +12,7 @@ const InfoBar = (props: Props) => {
     //TODO: Implement record functionality
 
   return (
-    <header className='pl-20 md:pl-[265px] fixed p-4 w-full flex items-center justify-between gap-4'>
+    <header className='pl-20 md:pl-[265px] fixed p-4 px-8 w-full flex flex-col md:flex-row items-end md:items-center justify-between gap-4'>
         <div className='flex gap-4 justify-center items-center border-2 rounded-full px-4 w-full max-w-lg'>
             <Search className='w-4 h-4 text-[#707070]' />
             <Input

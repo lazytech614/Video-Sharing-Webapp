@@ -6,11 +6,14 @@ type Props = {}
 const AuthCallbackPage = async (props: Props) => {
     // Authentication...
     const auth = await onAuthenticateUser()
-    console.log("Auth", auth);
+    // console.log("Auth", auth);
+
+    // const workspaceId = auth.user?.workspace[0].id
+    // console.log("Workspace ID: ", workspaceId);
     if(auth.status === 200 || auth.status === 201) 
-        return redirect(`/dashboard/${auth.user?.workspace[0].id}`)
+        redirect(`/dashboard/${auth.user?.workspace[0].id}`)
     else 
-        return redirect('/auth/sign-in')
+        redirect('/auth/sign-in')
 }
 
 export default AuthCallbackPage

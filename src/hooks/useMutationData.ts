@@ -8,7 +8,7 @@ import { toast } from "./use-toast";
 
 export const useMutationData = (
     mutationKey: MutationKey, 
-    mutationFn: MutateFunction<any, any>,
+    mutationFn: (variables: any) => Promise<any>,
     queryKey?: string,
     onSuccess?: () => void
 ) => {

@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { userQueryData } from "./userQueryData"
+import { useQueryData } from "./useQueryData"
 import { searchUsers } from "@/actions/user"
 
 export const useSearch = (key: string, type: "USERS") => {
@@ -29,7 +29,7 @@ export const useSearch = (key: string, type: "USERS") => {
         return () => clearTimeout(timer)
     }, [query])
 
-    const {isFetching, refetch} = userQueryData(
+    const {isFetching, refetch} = useQueryData(
         [key, debounce], 
         async ({queryKey}) => {
             if(type === "USERS") {

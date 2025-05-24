@@ -14,7 +14,7 @@ import {
     SelectItem 
 } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
-import { userQueryData } from "@/hooks/userQueryData"
+import { useQueryData } from "@/hooks/useQueryData"
 import { getWorkspaces } from "@/actions/workspace"
 import { NotificationProps, WorkspaceProps } from "@/types/index.type"
 import Modal from "../modal";
@@ -46,8 +46,8 @@ const Sidebar = ({activeWorkspaceId}: Props) => {
 
     const menuItems = MENU_ITEMS(activeWorkspaceId)
 
-    const {data, isFetched} = userQueryData(["user-workspaces"], getWorkspaces)
-    const {data: notifications} = userQueryData(["user-notifications"], () => getNotifications())
+    const {data, isFetched} = useQueryData(["user-workspaces"], getWorkspaces)
+    const {data: notifications} = useQueryData(["user-notifications"], () => getNotifications())
 
     const {data: workspace} = data as WorkspaceProps
     const {data: notificationCount} = notifications as NotificationProps

@@ -176,3 +176,109 @@ export const getWorkspaces = async () => {
     };
   }
 };
+
+export const createWorkspace = async (name: string) => {
+  try{
+    const user = await currentUser()
+    if(!user) 
+      return {status: 404, message: "User not found"}
+
+    const authorized = await client.user.findUnique({
+      where: {
+        clerkId: user.id
+      },
+      select: {
+        subscription: {
+          select: {
+            plan: true
+          }
+        }
+      }
+    })
+
+    if(authorized?.subscription?.plan === 'PRO') {
+      const workspace = await client.user.update({
+        where: {
+          clerkId: user.id
+        },
+        data: {
+          workspace: {
+            create: {
+              name: name,
+              type: 'PUBLIC',
+            }
+          }
+        }
+      })
+
+      if(workspace) 
+        return {status: 201, message: "Workspace created successfully", data: workspace}
+    }
+    return {status: 401, message: "You are not authorized to create a workspace", data: null}
+  }catch(err) {
+    console.log("Error in the createWorkspace action", err);
+    return {status: 500, message: (err as Error).message || "Something went wrong", data: null};
+  }
+}
+
+export const renameFolder = async (folderId: string, name: string) => {
+  try{
+    const folder = await client.folder.update({
+      where: {
+        id: folderId
+      },
+      data: {
+        name: name
+      }
+    })
+
+    if(folder) 
+      return {status: 200, message: "Folder renamed successfully", data: folder}
+    else 
+      return {status: 404, message: "Folder not found", data: null}
+  }catch(err) {
+    console.log("Error in the renameFolder action", err);
+    return {status: 500, message: (err as Error).message || "Something went wrong", data: null};
+  }
+}
+
+export const createFolder = async (workspaceId: string) => {
+  try{
+    const user = await currentUser()
+    if(!user) 
+      return {status: 404, message: "User not found"}
+
+    const result = await client.workSpace.update({
+      where: {
+        id: workspaceId
+      },
+      data: {
+        folders: {
+          create: {
+            name: "Untitled Folder",
+          }
+        }
+      },
+      select: {
+        // Only select the single, newly created folder (ordered by creation time)
+        folders: {
+          orderBy: { createdAt: "desc" },
+          take: 1,
+          include: { _count: { select: { videos: true } } }
+        }
+      }
+    })
+
+    const [isNewFolder] = result.folders;
+
+    if(isNewFolder) {
+      return {status: 201, message: "Folder created successfully", data: isNewFolder}
+    } else {
+      return {status: 400, message: "Could not create folder", data: null}
+    }
+
+  }catch(err) {
+    console.log("Error in the createFolder action", err);
+    return {status: 500, message: (err as Error).message || "Something went wrong", data: null};
+  }
+}
