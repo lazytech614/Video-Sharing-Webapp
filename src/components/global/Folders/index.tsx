@@ -20,13 +20,10 @@ const Folders = ({workspaceId}: Props) => {
     () => getWorkspaceFolders(workspaceId),
   )
 
-  const {latestVaribles} = useMutationDataState(['create-folder'])
+  const {latestVariables} = useMutationDataState(['create-folder'])
 
-  
-  
+
   const {status, data: folders} = data as FoldersProps
-  
-  console.log("useQueryData result:", folders);
 
   //TODO: Add the classnames for the folder based on success response or error response
   //TODO: Add the redux stuff
@@ -47,10 +44,10 @@ const Folders = ({workspaceId}: Props) => {
         {status !== 200 ? 
           <p className='text-neutral-300'>No Folders</p> : 
           <>
-            {latestVaribles && latestVaribles.status==="pending" && (
+            {latestVariables && latestVariables.status==="pending" && (
               <Folder 
-                name={latestVaribles.variables.name}
-                id={latestVaribles.variables.id}
+                name={latestVariables.variables.name}
+                id={latestVariables.variables.id}
                 count={0}
                 optimistic
               />

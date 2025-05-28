@@ -8,6 +8,7 @@ import {
 import CreateWorkspace from '@/components/global/create-workspace'
 import CreateFolder from '@/components/global/create-folder'
 import Folders from '@/components/global/Folders'
+import Videos from '@/components/global/videos'
 
 
 type Props = {
@@ -41,6 +42,7 @@ const WorkspaceIdPage = ({ params }: Props) => {
         <section className='py-9'>
           <TabsContent value='videos'>
             <Folders workspaceId={params.workspaceId} />
+            {/* <Videos  folderId={params.workspaceId} workspaceId={params.workspaceId} videoKey=''/> */}
           </TabsContent>
         </section>
       </Tabs>

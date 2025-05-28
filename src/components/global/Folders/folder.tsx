@@ -8,6 +8,7 @@ import { FolderIcon } from 'lucide-react';
 import { useMutationData } from '@/hooks/useMutationData';
 import { renameFolder } from '@/actions/workspace';
 import { Input } from '@/components/ui/input';
+import { useMutationDataState } from '@/hooks/useMutationDataState';
 
 type Props = {
     name: string;
@@ -34,6 +35,8 @@ const Folder = ({name, id, optimistic, count}: Props) => {
         Renamed  // Onsuccess callback
     )
 
+    const {latestVariables} = useMutationDataState(['rename-folder'])
+
     const handleFolderClick = () => {
         if(onRename) {
             return;
@@ -49,7 +52,7 @@ const Folder = ({name, id, optimistic, count}: Props) => {
     const updateFolderName = (e: React.FocusEvent<HTMLInputElement>) => {
         if(inputRef.current && folderCardRef.current) {
             if(inputRef.current.value) {
-                mutate({name: inputRef.current.value});
+                mutate({name: inputRef.current.value, id});
             }else {
                 Renamed();
             }
@@ -63,19 +66,21 @@ const Folder = ({name, id, optimistic, count}: Props) => {
         className={cn( optimistic && "opacity-60", `flex hover:bg-neutral-800 cursor-pointer transition duration-150 items-center gap-2 justify-between min-w-[250px] py-4 px-4 rounded-lg border-[1px]`)}>
         <Loader state={false}>
             <div className='flex flex-col gap-[1px]'>
-                {onRename ? <Input 
-                    autoFocus
-                    onBlur={(e) => updateFolderName(e)}
-                    placeholder={name}
-                    className='border-none text-base w-full outline-none text-neutral-300 bg-transparent p-0'
-                    ref={inputRef}
-                /> : <p 
-                        onClick={(e) => e.stopPropagation()}
-                        onDoubleClick={handleNameDoubleClick}
-                        className='text-neutral-300'
-                    >
-                        {name}
-                    </p>
+                {onRename ? 
+                    <Input 
+                        autoFocus
+                        onBlur={(e) => updateFolderName(e)}
+                        placeholder={name}
+                        className='border-none text-base w-full outline-none text-neutral-300 bg-transparent p-0'
+                        ref={inputRef}
+                    /> : <p 
+                            onClick={(e) => e.stopPropagation()}
+                            onDoubleClick={handleNameDoubleClick}
+                            className='text-neutral-300'
+                        >
+                            {latestVariables && latestVariables.status === "pending" && latestVariables.variables.id === id ?
+                            latestVariables.variables.name : name}
+                        </p>
                 }
                 <span className='text-sm text-neutral-500'>{count || 0} Videos</span>
             </div>

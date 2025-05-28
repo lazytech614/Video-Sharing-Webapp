@@ -30,6 +30,7 @@ export type NotificationProps = {
 export type FoldersProps = {
     status: number,
     data: ({
+        name: string,
         _count: {
             videos: number
         }
@@ -38,6 +39,41 @@ export type FoldersProps = {
         name: string,
         createdAt: Date,
         updatedAt: Date,
-        workspaceId: string | null,
+        workSpaceId: string | null,
     })[]
+}
+
+export type FolderProps = {
+    status: number,
+    data: {
+        id: string,
+        name: string,
+        createdAt: Date,
+        updatedAt: Date,
+        workSpaceId: string | null,
+        _count: {
+            videos: number
+        }
+    }
+}
+
+export type VideosProps = {
+    status: number,
+    data: {
+        User: {
+            firstName: string | null,
+            lastName: string | null,
+            image: string | null,
+        } | null,
+        id: string,
+        processing: boolean,
+        Folder: {
+            id: string,
+            name: string
+        } | null,
+        title: string | null,
+        source: string,
+        createdAt: Date,
+        updatedAt: Date,
+    }[]
 }

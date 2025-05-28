@@ -5,7 +5,6 @@ import { client } from "@/lib/prisma";
 
 export const onAuthenticateUser = async () => {
     try {
-        // console.log("I am here");
         const user = await currentUser()
         if(!user) {
             console.log("User not found");

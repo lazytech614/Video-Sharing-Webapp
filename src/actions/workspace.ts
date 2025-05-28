@@ -282,3 +282,30 @@ export const createFolder = async (workspaceId: string) => {
     return {status: 500, message: (err as Error).message || "Something went wrong", data: null};
   }
 }
+
+export const getFolderInfo = async (folderId: string) => {
+  try {
+    const folder = await client.folder.findUnique({
+      where: {
+        id: folderId
+      },
+      select: {
+        name: true,
+        _count: {
+          select: {
+            videos: true
+          }
+        }
+      }
+    });
+
+    if (folder) {
+      return { status: 200, message: "Folder info found", data: folder };
+    } else {
+      return { status: 404, message: "Folder not found", data: null };
+    }
+  } catch (err) {
+    console.log("Error in the getFolderInfo action", err);
+    return { status: 500, message: (err as Error).message || "Something went wrong", data: null };
+  }
+}
