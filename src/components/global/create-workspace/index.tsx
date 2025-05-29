@@ -30,9 +30,9 @@ const CreateWorkspace = (props: Props) => {
                 title='Create Workspace'
                 description='Workspaces help you organize your videos and folders and collaborate with other team members. You are assigned a default workspace where you can share videos in private with yourself.'
                 trigger={
-                    <Button className='bg-[#1d1d1d] text-[#707070] flex items-center gap-2 py-2 px-4 rounded-2xl'>
+                    <Button className='bg-[#1d1d1d] text-[#707070] flex items-center gap-2 py-6 px-4 rounded-2xl'>
                         <FolderPlusIcon />
-                        Create A Workspace
+                        <span className='text-[#bdbdbd]'>Create Workspace</span>
                     </Button>
                 }
             >

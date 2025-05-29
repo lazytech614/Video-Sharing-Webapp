@@ -72,7 +72,8 @@ const Sidebar = ({activeWorkspaceId}: Props) => {
             <p className="text-2xl font-bold">Nuevue</p>
          </div>
          <Select 
-            defaultValue={activeWorkspaceId} onValueChange={onChangeActiveWorkspace}
+            defaultValue={activeWorkspaceId} 
+            onValueChange={onChangeActiveWorkspace}
         >
              <SelectTrigger className="mt-16 text-neutral-400 bg-transparent">
                 <SelectValue placeholder="Select a workspace"></SelectValue>
@@ -144,7 +145,7 @@ const Sidebar = ({activeWorkspaceId}: Props) => {
             )
         }
          <nav className="w-full">
-            <ul className="overflow-auto overflow-x-hidden fade-layer space-y-2">
+            <ul className="h-[150px] overflow-auto overflow-x-hidden fade-layer space-y-2">
                 {workspace.workspace.length > 0 && workspace.workspace.map((item) => (
                     item.type !== 'PERSONAL' && (
                         <SidebarItem 

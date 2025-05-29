@@ -1,10 +1,9 @@
 import { 
-    MutateFunction, 
     MutationKey, 
     useMutation, 
     useQueryClient 
 } from "@tanstack/react-query";
-import { toast } from "./use-toast";
+import { toast } from "sonner";
 
 export const useMutationData = (
     mutationKey: MutationKey, 
@@ -19,13 +18,9 @@ export const useMutationData = (
         onSuccess(data) {
             if(onSuccess) 
                 onSuccess()
-            return toast({
-                title:
-                data.status === 200
-                    ? "Success"
-                    : "Error",
-                description: data.data
-            });
+            if(data.status === 200 || data.status === 201) {
+                return toast.success(data.message || "Success");
+            }
         },
         onSettled: async () => {
             return await client.invalidateQueries({queryKey: [queryKey]})
