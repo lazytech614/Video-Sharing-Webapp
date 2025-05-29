@@ -81,8 +81,8 @@ datasource db {
  model Folder {
   id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name          String  @default("New Folder")
-  workSpaceId   String? @db.Uuid 
-  workSpace     WorkSpace? @relation(fields: [workSpaceId], references: [id])
+  workspaceId   String? @db.Uuid 
+  workSpace     WorkSpace? @relation(fields: [workspaceId], references: [id])
   videos        Video[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -93,13 +93,13 @@ datasource db {
   title         String?  @default("New Video")
   description   String?  @default("No Description")
   source        String  @unique
-  workSpaceId   String? @unique @db.Uuid 
+  workSpaceId   String?  @db.Uuid 
   workSpace     WorkSpace? @relation(fields: [workSpaceId], references: [id], onDelete: Cascade)
-  folderId      String? @unique @db.Uuid 
+  folderId      String?  @db.Uuid 
   folder        Folder? @relation(fields: [folderId], references: [id], onDelete: Cascade)
   userId        String? @unique @db.Uuid 
   user          User? @relation(fields: [userId], references: [id], onDelete: Cascade)
-  processing   Boolean @default(false)
+  processing    Boolean @default(false)
   views         Int      @default(0)
   summary       String?
   createdAt     DateTime  @default(now())

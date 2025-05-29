@@ -33,6 +33,8 @@ import {
     SheetTrigger 
 } from "@/components/ui/sheet";
 import InfoBar from "../info-bar";
+import { useDispatch } from "react-redux";
+import { WORKSPACES } from "@/redux/slices/workspaces";
 
 type Props = {
     activeWorkspaceId: string
@@ -43,6 +45,7 @@ const Sidebar = ({activeWorkspaceId}: Props) => {
 
     const router = useRouter();
     const pathname = usePathname();
+    const dispatch = useDispatch();
 
     const menuItems = MENU_ITEMS(activeWorkspaceId)
 
@@ -57,6 +60,10 @@ const Sidebar = ({activeWorkspaceId}: Props) => {
     }
 
     const currentWorkspace = workspace?.workspace?.find((workspace) => workspace.id === activeWorkspaceId)
+
+    if(isFetched && workspace) {
+        dispatch(WORKSPACES({workspaces: workspace?.workspace}))
+    }
 
   const SidebarSection = (
     <div className="bg-[#111111] flex-none relative p-4 h-full w-[250px] flex flex-col items-center gap-y-4  overflow-hidden">

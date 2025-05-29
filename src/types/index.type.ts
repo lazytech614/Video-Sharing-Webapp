@@ -60,18 +60,19 @@ export type FolderProps = {
 export type VideosProps = {
     status: number,
     data: {
-        User: {
+        user: {
             firstName: string | null,
             lastName: string | null,
             image: string | null,
         } | null,
         id: string,
         processing: boolean,
-        Folder: {
+        folder: {
             id: string,
             name: string
         } | null,
         title: string | null,
+        description: string | null,
         source: string,
         createdAt: Date,
         updatedAt: Date,

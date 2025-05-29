@@ -8,12 +8,16 @@ import { useQueryData } from '@/hooks/useQueryData'
 import { getWorkspaceFolders } from '@/actions/workspace'
 import { useMutationDataState } from '@/hooks/useMutationDataState'
 import { FoldersProps } from '@/types/index.type'
+import { useDispatch } from 'react-redux'
+import { FOLDERS } from '@/redux/slices/folders'
 
 type Props = {
     workspaceId: string
 }
 
 const Folders = ({workspaceId}: Props) => {
+  const dispatch = useDispatch()
+
   // Fetching workspace folders
   const {data, isFetched} = useQueryData(
     ['workspace-folders'],
@@ -23,10 +27,41 @@ const Folders = ({workspaceId}: Props) => {
   const {latestVariables} = useMutationDataState(['create-folder'])
 
 
-  const {status, data: folders} = data as FoldersProps
+  // 2) Guard: only run once data has arrived
+  if (isFetched && data) {
+    // Narrow to your known response shape
+    const { status, data: apiFolders } = data as FoldersProps;
+
+    // Only on success
+    if (status === 200 && apiFolders) {
+      // 3) Normalize: drop `updatedAt` and rename `workSpaceId` → `workspaceId`
+      const normalized = apiFolders.map((f) => ({
+        _count: f._count,
+        id: f.id,
+        name: f.name,
+        createdAt: f.createdAt,
+        workspaceId: f.workSpaceId ?? "",  // lowercase `workspaceId`
+      }));
+
+      // 4) Dispatch into your slice
+      dispatch(FOLDERS({ folders: normalized }));
+    }
+  }
+
+  // 5) Prepare for rendering
+  const { status = 0, data: folders = [] } = (data as FoldersProps) ?? {};
+
+  
+
+
+  // const {status, data: folders} = data as FoldersProps
+
+  // if(isFetched && folders) {
+  //   dispatch(FOLDERS({folders: folders}))
+  // }
+
 
   //TODO: Add the classnames for the folder based on success response or error response
-  //TODO: Add the redux stuff
 
   return (
     <div className='flex flex-col gap-4'>

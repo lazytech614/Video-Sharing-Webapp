@@ -19,8 +19,8 @@ const VideoCardMenu = ({
   return (
     <Modal
         trigger={<Move size={20} className='text-[#a4a4a4]' fill='#a4a4a4' />}
-        title='Video Options'
-        description='Select an option for this video'
+        title='Move to new folder or workspace'
+        description='Move video to new folder or workspace'
         className='flex items-center cursor-pointer gap-x-2'
     >
         <ChangeVideolocation

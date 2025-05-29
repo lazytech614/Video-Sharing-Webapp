@@ -42,7 +42,8 @@ const WorkspaceIdPage = ({ params }: Props) => {
         <section className='py-9'>
           <TabsContent value='videos'>
             <Folders workspaceId={params.workspaceId} />
-            {/* <Videos  folderId={params.workspaceId} workspaceId={params.workspaceId} videoKey=''/> */}
+            {/* TODO: Add logic to show first few videos or something like that */}
+            <Videos  folderId={params.workspaceId} workspaceId={params.workspaceId} videoKey=''/>
           </TabsContent>
         </section>
       </Tabs>
