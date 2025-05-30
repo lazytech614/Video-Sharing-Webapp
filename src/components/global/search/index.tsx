@@ -1,4 +1,8 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { 
+  Avatar, 
+  AvatarFallback, 
+  AvatarImage 
+} from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -75,32 +79,34 @@ const Search = ({workspaceId}: Props) => {
         <div>
           {onUsers.map((user) => (
             <div key={user.id} className="flex gap-x-3 items-center border-2 w-full p-3 rounded-xl">
-            <Avatar>
-              <AvatarImage src={user.image as string}>
+              <Avatar>
+                <AvatarImage
+                  src={user.image as string}
+                  alt={`${user.firstName} ${user.lastName}`}
+                />
                 <AvatarFallback>
                   <User />
                 </AvatarFallback>
-              </AvatarImage>
-            </Avatar>
-            <div className="flex flex-col items-start">
-              <h2 className="font-bold text-lg capitalize">{user.firstName} {user.lastName}</h2>
-              <p className="lowercase text-xs bg-white px-2 rounded-lg text-[#1e1e1e]">{user.subscription?.plan}</p>
-            </div>
-            <div className="flex-1 flex justify-end items-center">
-              <Button 
-                onClick={() => {}}
-                variant={"default"}
-                className="w-5/12 font-bold"
-              >
-                <Loader 
-                  state={false}
-                  color="#000"
+              </Avatar>
+              <div className="flex flex-col items-start">
+                <h2 className="font-bold text-lg capitalize">{user.firstName} {user.lastName}</h2>
+                <p className="lowercase text-xs bg-white px-2 rounded-lg text-[#1e1e1e]">{user.subscription?.plan}</p>
+              </div>
+              <div className="flex-1 flex justify-end items-center">
+                <Button 
+                  onClick={() => {}}
+                  variant={"default"}
+                  className="w-5/12 font-bold"
                 >
-                  Invite
-                </Loader>
-              </Button>
+                  <Loader 
+                    state={false}
+                    color="#000"
+                  >
+                    Invite
+                  </Loader>
+                </Button>
+              </div>
             </div>
-          </div>
           ))}
         </div>
       )}

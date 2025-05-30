@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 import { useQueryData } from "./useQueryData"
 import { searchUsers } from "@/actions/user"
 
@@ -35,9 +35,13 @@ export const useSearch = (key: string, type: "USERS") => {
             if(type === "USERS") {
                 const users = await searchUsers(queryKey[1] as string)
 
-                if(users.status === 200) 
+                if(users.status === 200) {
                     setOnUsers(users.data)
+                    return users.data
+                }
+                return []
             }
+            return []
         },
         false
     )
