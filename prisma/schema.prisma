@@ -17,7 +17,7 @@ datasource db {
   trial           Boolean             @default(false)
   firstView       Boolean             @default(false)
   studios         Media?
-  workspace       WorkSpace[]  
+  workspace       WorkSpace[]         @relation("UserWorkspaces")
   videos          Video[]
   subscription    Subscription?
   members         Member[]
@@ -84,7 +84,7 @@ datasource db {
   name          String
   type          TYPE                  @default(PERSONAL)
   userId        String?               @db.Uuid 
-  user          User?                 @relation(fields: [userId], references: [id])
+  user          User?                 @relation("UserWorkspaces", fields: [userId], references: [id])
   folders       Folder[]
   videos        Video[]
   members       Member[]
