@@ -78,3 +78,27 @@ export type VideosProps = {
         updatedAt: Date,
     }[]
 }
+
+export type VideoProps = {
+    status: number,
+    data: {
+        user: {
+            firstName: string | null,
+            lastName: string | null,
+            image: string | null,
+            clerkId: string
+            trial: boolean
+            subscription: {
+                plan: 'FREE' | 'PRO'
+            } | null
+        } | null,
+        title: string | null,
+        description: string | null,
+        source: string,
+        views: number,
+        createdAt: Date,
+        summary: string,
+
+    }
+    author: boolean
+}

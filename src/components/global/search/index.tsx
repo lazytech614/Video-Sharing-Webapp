@@ -12,6 +12,9 @@ type Props = {
 }
 
 const Search = ({workspaceId}: Props) => {
+  //TODO: Setup sending invitation functionality
+  //TODO: Setup invite button in UI
+
   const { query, onSearchQuery, isFetching, onUsers } = useSearch(
     'get-users',
     'USERS'

@@ -339,3 +339,63 @@ export const moveVideoLocation = async (videoId: string, folderId: string, works
     return { status: 500, message: (err as Error).message || "Something went wrong", data: null };
   }
 }
+
+export const getPreviewVideo = async (videoId: string) => {
+  try {
+    const user = await currentUser();
+    if (!user) {
+      return { status: 404, message: "User not found" };
+    }
+
+    const video = await client.video.findUnique({
+      where: {
+        id: videoId
+      },
+      select: {
+        title: true,
+        createdAt: true,
+        source: true,
+        description: true,
+        processing: true,
+        views: true,
+        summary: true,
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+            image: true,
+            clerkId: true,
+            trial: true,
+            subscription: {
+              select: {
+                plan: true
+              }
+            }
+          }
+        } 
+      }
+    });
+
+    if (video) {
+      return { 
+        status: 200, 
+        message: "Video found", 
+        data: video, 
+        autor: user.id === video?.user?.clerkId ? true : false 
+      };
+    } else {
+      return { 
+        status: 404, 
+        message: "Video not found", 
+        data: null 
+      };
+    }
+  } catch (err) {
+    console.log("Error in the getPreviewVideo action", err);
+    return { 
+      status: 500, 
+      message: (err as Error).message || "Something went wrong", 
+      data: null 
+    };
+  }
+}
