@@ -2,7 +2,33 @@
 
 import { currentUser } from "@clerk/nextjs/server";
 import { client } from "@/lib/prisma";
-import { Ruthie } from "next/font/google";
+import nodemailer from 'nodemailer';
+
+export const sendEmail = async (
+    to: string,
+    subject: string,
+    text: string,
+    html?: string,
+) => {
+    const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: {
+            user: process.env.MAILER_EMAIL,
+            pass: process.env.MAILER_PASSWORD,
+        },
+    })
+
+    const mailOptions = {
+        to,
+        subject,
+        text,
+        html,
+    }
+
+    return {transporter, mailOptions}
+}
 
 export const onAuthenticateUser = async () => {
     try {
@@ -342,4 +368,164 @@ export const getVideoComments = async (videoId: string) => {
         return {status: 500, message: "Something went wrong in getVideoComments action", data: null}
     }
 }
+
+export const inviteMembers = async (
+    workspaceId: string,
+    recieverId: string,
+    email: string
+) => {
+    try{
+        const user = await currentUser()
+        if(!user) 
+            return {status: 404, message: "User not found"}
+
+        const senderInfo = await client.user.findUnique({
+            where: {
+                clerkId: user.id
+            },
+            select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true
+            }
+        })    
+        if(senderInfo?.id) {
+            const workspace = await client.workSpace.findUnique({
+                where: {
+                    id: workspaceId
+                },
+                select: {
+                    name: true
+                }
+            })             
+            if(workspace) {
+                const invitation = await client.invite.create({
+                    data: {
+                        senderId: senderInfo.id,
+                        recieverId: recieverId,
+                        workSpaceId: workspaceId,
+                        content: `You have been invited to join ${workspace.name} workspace, click accept to confirm.`
+                    },
+                    select: {
+                        id: true
+                    }
+                })
+
+                const notification = await client.user.update({
+                    where: {
+                        clerkId: user.id,
+                    },
+                    data: {
+                        notifications: {
+                            create: {
+                                content: `${user.firstName} ${user.lastName} invited ${senderInfo.firstName} ${senderInfo.lastName} to join ${workspace.name} workspace`,
+                            }
+                        }
+                    }
+                })
+
+                if(invitation) {
+                    const {transporter, mailOptions} = await sendEmail(
+                        email,
+                        'You got an invitation',
+                        `You are invited to join ${workspace.name} workspace, click accept to confirm.`,
+                        `<a href="${process.env.NEXT_PUBLIC_HOST_URL}/invite/${invitation.id}" style="
+                            background-color: #000;
+                            padding: 5px 10px;
+                            border-radius: 10px;
+                            cursor: pointer;
+                        ">
+                            Accept Invite
+                        </a>`
+                    )
+
+                    transporter.sendMail(mailOptions, 
+                        async (error, info) => {
+                            if(error) {
+                                console.log("Error in the inviteMembers action", error.message);
+                            }else {
+                                console.log("Invite sent successfully", info);
+                            }
+                        }
+                    )
+                    return {status: 200, message: "Invitation sent successfully", data: invitation}
+                }
+                return {status: 400, message: "Invitation not sent", data: null}
+            }
+            return {status: 404, message: "Workspace not found", data: null}
+        }
+        return {status: 404, message: "Recipient not found", data: null}
+    }catch(err) {
+        console.log("Error in the inviteMembers action", err);
+        return {status: 500, message: "Something went wrong in inviteMembers action", data: null}
+    }
+}
+
+export const acceptInvite = async (inviteId: string) => {
+  try {
+    const user = await currentUser();
+    if (!user) {
+      return { status: 404, message: "User not found", data: null };
+    }
+
+    const userRecord = await client.user.findUnique({
+      where: { clerkId: user.id },
+      select: { id: true },
+    });
+    if (!userRecord) {
+      return { status: 404, message: "User record not found", data: null };
+    }
+    const internalUserId = userRecord.id;
+
+    const invitation = await client.invite.findUnique({
+      where: { id: inviteId },
+      select: {
+        workSpaceId: true,
+        reciever: { select: { clerkId: true } },
+      },
+    });
+    if (!invitation || invitation.reciever?.clerkId !== user.id) {
+      return { status: 401, message: "Not authorized", data: null };
+    }
+    const wsId = invitation.workSpaceId!;
+
+    const [acceptedInviteResult] = await client.$transaction([
+      client.invite.update({
+        where: { id: inviteId },
+        data: { accepted: true },
+      }),
+      client.user.update({
+        where: { id: internalUserId },
+        data: {
+          members: {
+            create: { workSpaceId: wsId },
+          },
+          workspace: {
+            connect: {
+              id: wsId,
+            }
+          }
+        },
+      })
+    ]);
+
+    return {
+      status: 200,
+      message: "Invite accepted successfully",
+      data: acceptedInviteResult,
+    };
+  } catch (err) {
+    console.log("Error in the acceptInvite action", err);
+    return {
+      status: 500,
+      message: "Something went wrong in acceptInvite action",
+      data: null,
+    };
+  }
+};
+
+
+
+
         

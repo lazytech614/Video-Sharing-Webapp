@@ -124,33 +124,38 @@ datasource db {
 
  model Member {
   id            String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId        String?               @unique @db.Uuid 
+  userId        String?               @db.Uuid 
   user          User?                 @relation(fields: [userId], references: [id])
-  workSpaceId   String?               @unique @db.Uuid 
+  workSpaceId   String?               @db.Uuid 
   workSpace     WorkSpace?            @relation(fields: [workSpaceId], references: [id])
   members       Boolean               @default(true)
   createdAt     DateTime              @default(now())
   updatedAt     DateTime              @updatedAt
+
+  @@unique([userId, workSpaceId])
  }
 
  model Invite {
   id            String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  senderId      String?               @unique @db.Uuid 
+  senderId      String?               @db.Uuid 
   sender        User?                 @relation("sender", fields: [senderId], references: [id])
-  recieverId    String?               @unique @db.Uuid 
+  recieverId    String?               @db.Uuid 
   reciever      User?                 @relation("reciever", fields: [recieverId], references: [id])
-  workSpaceId   String?               @unique @db.Uuid 
+  workSpaceId   String?               @db.Uuid 
   workSpace     WorkSpace?            @relation(fields: [workSpaceId], references: [id])
   content       String
   accepted      Boolean               @default(false)
   createdAt     DateTime              @default(now())
   updatedAt     DateTime              @updatedAt
+
+  @@unique([senderId, recieverId, workSpaceId])
  }
 
  model Notification {
   id            String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId        String?               @unique @db.Uuid 
+  userId        String?               @db.Uuid 
   user          User?                 @relation(fields: [userId], references: [id])
+  content       String
   createdAt     DateTime              @default(now())
   updatedAt     DateTime              @updatedAt
  }
