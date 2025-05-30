@@ -8,7 +8,7 @@ type Props = {
     type?: 'text' | 'number' | 'email' | 'password';
     inputType: 'select' | 'input' | 'textarea';
     options?: { label: string; value: string, id: string }[]; // For select input
-    label: string;
+    label?: string;
     placeholder?: string;
     name: string;
     register: UseFormRegister<any>; // Register function from react-hook-form
@@ -101,6 +101,7 @@ const FormGenerator = ({
                         id={`textarea-${label}`}
                         placeholder={placeholder}
                         {...register(name)}
+                        rows={lines}
                         className='bg-transparent border-themeGray text-themeTextGray'
                     />
                     <ErrorMessage 

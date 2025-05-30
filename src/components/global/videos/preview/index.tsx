@@ -41,7 +41,7 @@ const VideoPreview = ({videoId}: Props) => {
     );
 
   return (
-    <div className='grid grid-cols-1 xl:grid-cols-3 lg:py-10 overflow-y-auto gap-5'>
+    <div className='grid grid-cols-1 xl:grid-cols-3 p-10 px-16 lg:py-10 overflow-y-auto gap-5'>
         <div className='flex flex-col lg:col-span-2 gap-y-10'>
             <div>
                 <div className='flex gap-x-5 items-start justify-between'>
@@ -121,7 +121,10 @@ const VideoPreview = ({videoId}: Props) => {
                     <VideoTranscript 
                         transcript={video.description} 
                     />
-                    <Activity />
+                    <Activity 
+                        author={video.user?.firstName as string}
+                        videoId={videoId}
+                    />
                 </TabMenu>
             </div>
         </div>

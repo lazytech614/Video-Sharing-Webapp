@@ -102,3 +102,46 @@ export type VideoProps = {
     }
     author: boolean
 }
+
+export type CommentRepliesProps = {
+    id: string,
+    comment: string,
+    createdAt: Date
+    commentId: string
+    videoId: string
+    userId: string
+    User: {
+        id: string
+        email: string
+        firstName: string | null
+        lastName: string | null
+        createdAt: Date
+        clerkId: string
+        image: string
+        trial: boolean
+        firstView: boolean
+    } | null
+}
+
+export type VideoCommentProps = {
+    data: {
+        User: {
+            id: string
+            email: string
+            firstName: string | null
+            lastName: string | null
+            createdAt: Date
+            clerkId: string
+            image: string
+            trial: boolean
+            firstView: boolean
+        } | null
+        reply: CommentRepliesProps[]
+        id: string,
+        comment: string,
+        createdAt: Date
+        commentId: string
+        videoId: string
+        userId: string
+    }[]
+}

@@ -2,6 +2,7 @@
 
 import { currentUser } from "@clerk/nextjs/server";
 import { client } from "@/lib/prisma";
+import { Ruthie } from "next/font/google";
 
 export const onAuthenticateUser = async () => {
     try {
@@ -178,6 +179,167 @@ export const getPaymentInfo = async () => {
     }catch(err) {
         console.log("Error in the getPaymentInfo action", err);
         return {status: 500, message: "Something went wrong in getPaymentInfo action", data: null}
+    }
+}
+
+export const getFirstView = async () => {
+    try{
+        const user = await currentUser()
+        if(!user) 
+            return {status: 404, message: "User not found"}
+
+        const userData = await client.user.findUnique({
+            where: {
+                clerkId: user.id
+            },
+            select: {
+                firstView: true
+            }
+        })
+
+        if(userData) 
+            return {status: 200, message: "First view found", data: userData.firstView}
+        else 
+            return {status: 404, message: "First view not found", data: false}
+    }catch(err) {
+        console.log("Error in the getFirstView action", err);
+        return {status: 500, message: "Something went wrong in getFirstView action", data: undefined}
+    }
+}
+
+export const enableFirstView = async (checked: boolean) => {
+    try{
+        const user = await currentUser()
+        if(!user) 
+            return {status: 404, message: "User not found"}
+
+        const view = await client.user.update({
+            where: {
+                clerkId: user.id
+            },
+            data: {
+                firstView: checked
+            }
+        })
+
+        if(view) 
+            return {status: 200, message: "First view updated", data: view.firstView}
+        else 
+            return {status: 404, message: "First view not updated", data: null}
+    }catch(err) {
+        console.log("Error in the enableFirstView action", err);
+        return {status: 500, message: "Something went wrong in enableFirstView action", data: null}
+    }
+}
+
+export const createCommentAndReply = async (
+    userId: string, 
+    comment: string, 
+    videoId: string, 
+    commentId?: string
+) => {
+    try{
+        const user = await currentUser()
+        if(!user) 
+            return {status: 404, message: "User not found"}
+
+        if(commentId) {
+            const reply = await client.comment.update({
+                where: {
+                    id: commentId
+                },
+                data: {
+                    reply: {
+                        create: {
+                            comment: comment,
+                            userId: userId,
+                            videoId: videoId
+                        }
+                    }
+                }
+            })
+
+            if(reply) 
+                return {status: 200, message: "Reply posted", data: reply}
+        }
+        
+        const newComment = await client.video.update({
+            where: {
+                id: videoId
+            },
+            data: {
+                comment: {
+                    create: {
+                        comment: comment,
+                        userId: userId
+                    }
+                }
+            }
+        })
+
+        if(newComment) 
+            return {status: 200, message: "Comment posted", data: newComment}
+        
+        return {status: 404, message: "Comment not posted or reply not posted", data: null}
+    }catch(err) {
+        console.log("Error in the createCommentAndReply action", err);
+        return {status: 500, message: "Something went wrong in createCommentAndReply action", data: null}
+    }
+}
+
+export const getUserProfile = async () => {
+    try {
+        const user = await currentUser()
+        if(!user) 
+            return {status: 404, message: "User not found", data: null}
+
+        const profileIdAndImage = await client.user.findUnique({
+            where: {
+                clerkId: user.id
+            },
+            select: {
+                image: true,
+                id: true
+            }
+        })
+
+        if(profileIdAndImage) 
+            return {status: 200, message: "User profile information found", data: profileIdAndImage}
+        else 
+            return {status: 404, message: "User profile information not found", data: null}
+    }catch(err) {
+        console.log("Error in the getUserProfile server action", err);
+        return {statua: 500, message: "Something went wrong", data: null}
+    }
+}
+        
+export const getVideoComments = async (videoId: string) => {
+    try{
+        const comments = await client.comment.findMany({
+            where: {
+                OR: [
+                    {
+                        videoId: videoId
+                    },
+                    {
+                        commentId: videoId
+                    }
+                ]
+            },
+            include: {
+                reply: {
+                    include: {
+                        User: true
+                    }
+                },
+                User: true
+            }
+        })
+
+        return {status: 200, message: "Video comments found", data: comments}
+    }catch(err) {
+        console.log("Error in the getVideoComments action", err);
+        return {status: 500, message: "Something went wrong in getVideoComments action", data: null}
     }
 }
         

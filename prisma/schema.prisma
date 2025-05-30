@@ -8,23 +8,38 @@ datasource db {
 }
 
  model User {
-  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  clerkId         String?    @unique
+  id              String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  clerkId         String?             @unique
   firstName       String?
   lastName        String?
   email           String 
   image           String?
-  trial           Boolean   @default(false)
+  trial           Boolean             @default(false)
+  firstView       Boolean             @default(false)
   studios         Media?
   workspace       WorkSpace[]  
   videos          Video[]
   subscription    Subscription?
   members         Member[]
   notifications   Notification[]
-  sender          Invite[]    @relation("sender")
-  reciever        Invite[]    @relation("reciever")
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  sender          Invite[]            @relation("sender")
+  reciever        Invite[]            @relation("reciever")
+  comment         Comment[]
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+ }
+
+ model Comment {
+  id              String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  comment         String
+  createdAt       DateTime            @default(now())
+  reply           Comment[]           @relation("reply")
+  commentId       String?             @db.Uuid
+  Comment         Comment?            @relation("reply", fields: [commentId], references: [id])
+  userId          String?             @db.Uuid
+  User            User?               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  videoId         String?             @db.Uuid
+  Video           Video?              @relation(fields: [videoId], references: [id], onDelete: Cascade)
  }
 
  enum SUBSCRIPTION_PLAN {
@@ -33,13 +48,13 @@ datasource db {
  }
 
  model Subscription {
-  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId          String? @unique @db.Uuid 
-  user            User? @relation(fields: [userId], references: [id])
-  plan            SUBSCRIPTION_PLAN @default(FREE)
-  customerId      String?   @unique
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id              String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String?             @unique @db.Uuid 
+  user            User?               @relation(fields: [userId], references: [id])
+  plan            SUBSCRIPTION_PLAN   @default(FREE)
+  customerId      String?             @unique
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
  }
 
  enum PRESET {
@@ -48,15 +63,15 @@ datasource db {
  }
 
  model Media {
-  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id         String                   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   screen     String?
   mic        String?
   camera     String?
-  preset     PRESET    @default(SD)
-  userId     String? @unique @db.Uuid 
-  user       User? @relation(fields: [userId], references: [id])
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  preset     PRESET                   @default(SD)
+  userId     String?                  @unique @db.Uuid 
+  user       User?                    @relation(fields: [userId], references: [id])
+  createdAt  DateTime                 @default(now())
+  updatedAt  DateTime                 @updatedAt
  }
 
  enum TYPE {
@@ -65,76 +80,77 @@ datasource db {
  }
 
  model WorkSpace {
-  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id            String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name          String
-  type          TYPE      @default(PERSONAL)
-  userId        String?  @db.Uuid 
-  user          User? @relation(fields: [userId], references: [id])
+  type          TYPE                  @default(PERSONAL)
+  userId        String?               @db.Uuid 
+  user          User?                 @relation(fields: [userId], references: [id])
   folders       Folder[]
   videos        Video[]
   members       Member[]
   invite        Invite[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
  }
 
  model Folder {
-  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name          String  @default("New Folder")
-  workspaceId   String? @db.Uuid 
-  workSpace     WorkSpace? @relation(fields: [workspaceId], references: [id])
+  id            String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name          String                @default("New Folder")
+  workspaceId   String?               @db.Uuid 
+  workSpace     WorkSpace?            @relation(fields: [workspaceId], references: [id])
   videos        Video[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
  }
 
  model Video {
-  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  title         String?  @default("New Video")
-  description   String?  @default("No Description")
-  source        String  @unique
-  workSpaceId   String?  @db.Uuid 
-  workSpace     WorkSpace? @relation(fields: [workSpaceId], references: [id], onDelete: Cascade)
-  folderId      String?  @db.Uuid 
-  folder        Folder? @relation(fields: [folderId], references: [id], onDelete: Cascade)
-  userId        String? @unique @db.Uuid 
-  user          User? @relation(fields: [userId], references: [id], onDelete: Cascade)
-  processing    Boolean @default(false)
-  views         Int      @default(0)
+  id            String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title         String?               @default("New Video")
+  description   String?               @default("No Description")
+  source        String                @unique
+  workSpaceId   String?               @db.Uuid 
+  workSpace     WorkSpace?            @relation(fields: [workSpaceId], references: [id], onDelete: Cascade)
+  folderId      String?               @db.Uuid 
+  folder        Folder?               @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  userId        String?               @unique @db.Uuid 
+  user          User?                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  processing    Boolean               @default(false)
+  views         Int                   @default(0)
   summary       String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  comment       Comment[]
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
  }
 
  model Member {
-  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId        String? @unique @db.Uuid 
-  user          User? @relation(fields: [userId], references: [id])
-  workSpaceId   String? @unique @db.Uuid 
-  workSpace     WorkSpace? @relation(fields: [workSpaceId], references: [id])
-  members       Boolean @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id            String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String?               @unique @db.Uuid 
+  user          User?                 @relation(fields: [userId], references: [id])
+  workSpaceId   String?               @unique @db.Uuid 
+  workSpace     WorkSpace?            @relation(fields: [workSpaceId], references: [id])
+  members       Boolean               @default(true)
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
  }
 
  model Invite {
-  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  senderId      String? @unique @db.Uuid 
-  sender        User? @relation("sender", fields: [senderId], references: [id])
-  recieverId    String? @unique @db.Uuid 
-  reciever      User? @relation("reciever", fields: [recieverId], references: [id])
-  workSpaceId   String? @unique @db.Uuid 
-  workSpace     WorkSpace? @relation(fields: [workSpaceId], references: [id])
+  id            String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  senderId      String?               @unique @db.Uuid 
+  sender        User?                 @relation("sender", fields: [senderId], references: [id])
+  recieverId    String?               @unique @db.Uuid 
+  reciever      User?                 @relation("reciever", fields: [recieverId], references: [id])
+  workSpaceId   String?               @unique @db.Uuid 
+  workSpace     WorkSpace?            @relation(fields: [workSpaceId], references: [id])
   content       String
-  accepted      Boolean  @default(false)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  accepted      Boolean               @default(false)
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
  }
 
  model Notification {
-  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId        String? @unique @db.Uuid 
-  user          User? @relation(fields: [userId], references: [id])
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id            String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String?               @unique @db.Uuid 
+  user          User?                 @relation(fields: [userId], references: [id])
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
  }
