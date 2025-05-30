@@ -61,6 +61,7 @@ const VideoCard = (props: Props) => {
                 />
             </div>
             <Link
+                //TODO: update the href
                 href={`/preview/${props.id}`}
                 className='hover:bg-[#252525] transition duration-150 flex flex-col justify-between h-full'
             >

@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
+import { Download } from 'lucide-react';
 
 import { getPreviewVideo } from '@/actions/workspace'
 import { useQueryData } from '@/hooks/useQueryData'
@@ -9,7 +10,6 @@ import { VideoProps } from '@/types/index.type';
 import CopyLink from '../copy-link';
 import RichLink from '../rich-link';
 import { truncateString } from '@/lib/utils';
-import { Download } from 'lucide-react';
 import TabMenu from '../../tabs';
 import AiTools from '../../ai-tools';
 import VideoTranscript from '../../video-transcript';
@@ -41,7 +41,7 @@ const VideoPreview = ({videoId}: Props) => {
     );
 
   return (
-    <div className='grid grid-cols-1 xl:grid-cols-3 p-10 lg:px-20 lg:py-10 overflow-y-auto gap-5'>
+    <div className='grid grid-cols-1 xl:grid-cols-3 lg:py-10 overflow-y-auto gap-5'>
         <div className='flex flex-col lg:col-span-2 gap-y-10'>
             <div>
                 <div className='flex gap-x-5 items-start justify-between'>
