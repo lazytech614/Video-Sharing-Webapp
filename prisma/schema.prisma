@@ -112,7 +112,7 @@ datasource db {
   workSpace     WorkSpace?            @relation(fields: [workSpaceId], references: [id], onDelete: Cascade)
   folderId      String?               @db.Uuid 
   folder        Folder?               @relation(fields: [folderId], references: [id], onDelete: Cascade)
-  userId        String?               @unique @db.Uuid 
+  userId        String?               @db.Uuid 
   user          User?                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   processing    Boolean               @default(false)
   views         Int                   @default(0)
