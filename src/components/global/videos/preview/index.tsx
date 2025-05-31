@@ -1,10 +1,10 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import { Download } from 'lucide-react';
 
-import { getPreviewVideo } from '@/actions/workspace'
+import { getPreviewVideo, sendEmailForFirstView } from '@/actions/workspace'
 import { useQueryData } from '@/hooks/useQueryData'
 import { VideoProps } from '@/types/index.type';
 import CopyLink from '../copy-link';
@@ -20,8 +20,6 @@ type Props = {
 }
 
 const VideoPreview = ({videoId}: Props) => {
-    //TODO: Setup notify the owner of the video about the views
-    //TODO: setup activity functionality
 
     const router = useRouter()
 
@@ -29,6 +27,8 @@ const VideoPreview = ({videoId}: Props) => {
         ['preview-video'],
         () => getPreviewVideo(videoId),
     )
+
+    const notifyFirstView = async () => await sendEmailForFirstView(videoId)
 
     const {data: video, status, author} = data as VideoProps
 
@@ -39,6 +39,16 @@ const VideoPreview = ({videoId}: Props) => {
     const daysAgo = Math.floor(
     (Date.now() - createdDate.getTime()) / (1000 * 60 * 60 * 24)
     );
+
+    useEffect(() => {
+        if(video.views === 0) {
+            notifyFirstView()
+        }
+
+        return () => {
+            notifyFirstView()
+        }
+    }, [])
 
   return (
     <div className='grid grid-cols-1 xl:grid-cols-3 p-10 px-16 lg:py-10 overflow-y-auto gap-5'>
