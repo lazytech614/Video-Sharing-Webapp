@@ -11,8 +11,6 @@ type Props = {
 const InvitePage = async ({params: {inviteId}}: Props) => {
     const invite = await acceptInvite(inviteId)
 
-    console.log("Invite: ", invite);
-
     if(invite.status === 404)
         return redirect(`/auth/sign-in`);
 

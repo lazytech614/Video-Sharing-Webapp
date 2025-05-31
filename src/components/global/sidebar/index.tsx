@@ -91,12 +91,13 @@ const Sidebar = ({activeWorkspaceId}: Props) => {
                         </SelectItem>
                     ))}
                     {workspace.members.length > 0 && workspace.members.map((workspace) => (
-                        workspace.workspace && 
+                        workspace.workSpace && 
+                        
                         <SelectItem
-                            key={workspace.workspace.id}
-                            value={workspace.workspace.id}
+                            key={workspace.workSpace.id}
+                            value={workspace.workSpace.id}
                         >
-                            {workspace.workspace.name}
+                            {workspace.workSpace.name}
                         </SelectItem>
                     ))}
                 </SelectGroup>
@@ -160,14 +161,14 @@ const Sidebar = ({activeWorkspaceId}: Props) => {
                 ))}
                 {
                     workspace.members.length > 0 && workspace.members.map((item) => (
-                        item.workspace && (
+                        item.workSpace && (
                             <SidebarItem 
-                                href={`/dashboard/${item.workspace.id}`}
-                                key={item.workspace.id}
-                                icon={<WorkspacePlaceholder children={item.workspace.name.charAt(0).toUpperCase()} />}
-                                title={item.workspace.name}
+                                href={`/dashboard/${item.workSpace.id}`}
+                                key={item.workSpace.id}
+                                icon={<WorkspacePlaceholder children={item.workSpace.name.charAt(0).toUpperCase()} />}
+                                title={item.workSpace.name}
                                 notifications={0}
-                                selected={pathname === `/dashboard/${item.workspace.id}`}
+                                selected={pathname === `/dashboard/${item.workSpace.id}`}
                             />
                         )
                     ))

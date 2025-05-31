@@ -22,7 +22,6 @@ const CopyLink = ({
     variant
 }: Props) => {
     const onCopyClipboard = () => {
-        console.log("I am here");
         navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_HOST_URL}/preview/${videoId}`)
 
         return toast.success(

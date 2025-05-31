@@ -43,13 +43,12 @@ export const onAuthenticateUser = async () => {
                 clerkId: user.id
             },
             include: {
-                workspace: {
-                    where: {
-                        user: {
-                            clerkId: user.id
-                        }
-                    }
-                }
+                workspace: true,
+                members: {
+                    include: {
+                        workSpace: true,
+                    },
+                },
             }
         })
 
@@ -77,15 +76,12 @@ export const onAuthenticateUser = async () => {
                         name: `${user.firstName}'s Workspace`,
                         type: 'PERSONAL'
                     }
-                }
+                },
             },
             include: {
-                workspace: {
-                    where: {
-                        user: {
-                            clerkId: user.id
-                        }
-                    }
+                workspace: true,
+                members: {
+                    include: { workSpace: true },
                 },
                 subscription: {
                     select: {
@@ -463,69 +459,49 @@ export const inviteMembers = async (
 }
 
 export const acceptInvite = async (inviteId: string) => {
-  try {
-    const user = await currentUser();
-    if (!user) {
-      return { status: 404, message: "User not found", data: null };
+    try {
+        const user = await currentUser();
+        if (!user) {
+            return { status: 404, message: "User not found", data: null };
+        }
+
+        const invitation = await client.invite.findUnique({
+            where: { id: inviteId },
+            select: {
+                workSpaceId: true,
+                reciever: { select: { clerkId: true } },
+            },
+        });
+        if (!invitation || invitation.reciever?.clerkId !== user.id) {
+            return { status: 401, message: "Not authorized", data: null };
+        }
+
+        const acceptInvite = client.invite.update({
+            where: { id: inviteId },
+            data: { accepted: true },
+        });      
+
+        const createMember = client.member.create({
+            data: {
+                user: { connect: { clerkId: user.id } },
+                workSpace: { connect: { id: invitation.workSpaceId! } },
+                members: true, 
+            },
+        });
+
+        const memberTransaction = await client.$transaction([
+            acceptInvite,
+            // updateMember
+            createMember
+        ]);
+
+        if(memberTransaction) {
+            return {status: 200, message: "Invite accepted successfully", data: memberTransaction}
+        }
+        return {status: 400, message: "Invite not accepted", data: null}
+
+    }catch (err) {
+        console.log("Error in the acceptInvite action", err);
+        return {status: 500, message: "Something went wrong in acceptInvite action", data: null}
     }
-
-    const userRecord = await client.user.findUnique({
-      where: { clerkId: user.id },
-      select: { id: true },
-    });
-    if (!userRecord) {
-      return { status: 404, message: "User record not found", data: null };
-    }
-    const internalUserId = userRecord.id;
-
-    const invitation = await client.invite.findUnique({
-      where: { id: inviteId },
-      select: {
-        workSpaceId: true,
-        reciever: { select: { clerkId: true } },
-      },
-    });
-    if (!invitation || invitation.reciever?.clerkId !== user.id) {
-      return { status: 401, message: "Not authorized", data: null };
-    }
-    const wsId = invitation.workSpaceId!;
-
-    const [acceptedInviteResult] = await client.$transaction([
-      client.invite.update({
-        where: { id: inviteId },
-        data: { accepted: true },
-      }),
-      client.user.update({
-        where: { id: internalUserId },
-        data: {
-          members: {
-            create: { workSpaceId: wsId },
-          },
-          workspace: {
-            connect: {
-              id: wsId,
-            }
-          }
-        },
-      })
-    ]);
-
-    return {
-      status: 200,
-      message: "Invite accepted successfully",
-      data: acceptedInviteResult,
-    };
-  } catch (err) {
-    console.log("Error in the acceptInvite action", err);
-    return {
-      status: 500,
-      message: "Something went wrong in acceptInvite action",
-      data: null,
-    };
-  }
-};
-
-
-
-
-        
+}

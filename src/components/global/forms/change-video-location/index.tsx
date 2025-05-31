@@ -32,9 +32,6 @@ const ChangeVideolocation = ({
     const folder = folders?.find((folder: any) => folder.id === currentFolder);
     const workspace = workspaces?.find((workspace) => workspace.id === currentWorkspace);
 
-    console.log("Is folders", isFolders);
-    console.log("Workspace", workspace);
-
   return (
     <form className='flex flex-col gap-y-5' onSubmit={onFormSubmit}>
         <div className='border-[1px] rounded-xl p-5'>
