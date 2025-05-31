@@ -403,10 +403,13 @@ export const getPreviewVideo = async (videoId: string) => {
 
 export const sendEmailForFirstView = async (videoId: string) => {
   try {
+    console.log("I have entered here...");
     const user = await currentUser();
     if (!user) {
       return { status: 404, message: "User not found" };
     }
+
+    console.log("User found...");
 
     const firstViewSettings = await client.user.findUnique({
       where: {
@@ -419,6 +422,8 @@ export const sendEmailForFirstView = async (videoId: string) => {
 
     if(!firstViewSettings?.firstView) 
       return {status: 404, message: "First view settings not found", data: null}
+
+    console.log("First view settings found...");
 
     const video = await client.video.findUnique({
       where: {
@@ -435,7 +440,13 @@ export const sendEmailForFirstView = async (videoId: string) => {
       }
     });
 
-    if(video && video.views === 0) {
+    if(!video) 
+      return null
+
+    console.log("Video found...");
+    
+    if(video.views === 0) {
+      console.log("Views of video is 0 ...");
       await client.video.update({
         where: {
           id: videoId,
@@ -445,9 +456,8 @@ export const sendEmailForFirstView = async (videoId: string) => {
         }
       })
     }
+    
 
-    if(!video) 
-      return null
 
     const {transporter, mailOptions} = await sendEmail(
       video.user?.email!,
@@ -455,7 +465,10 @@ export const sendEmailForFirstView = async (videoId: string) => {
       `Your video ${video.title} just got it's first viewer`
     )
 
+    console.log("Transporter created...");
+
     transporter.sendMail(mailOptions, async (error, info) => {
+      console.log("Trying to send mail...");
       if(error) 
         console.log("Error in sending mail", error.message);
       else {
@@ -472,8 +485,11 @@ export const sendEmailForFirstView = async (videoId: string) => {
             }
           }
         })
-        if(notification) 
+        if(notification) {
+          console.log("Notifucation created...");
           return {status: 200, message: "Email sent successfully", data: notification}
+        }
+        console.log("I am leaving...");
       }
     })
   } catch (err) {

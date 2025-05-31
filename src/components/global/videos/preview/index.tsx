@@ -32,6 +32,8 @@ const VideoPreview = ({videoId}: Props) => {
 
     const {data: video, status, author} = data as VideoProps
 
+    console.log("Video: ", video);
+
     if(status !== 200) 
         router.push('/')
 
@@ -40,6 +42,7 @@ const VideoPreview = ({videoId}: Props) => {
     (Date.now() - createdDate.getTime()) / (1000 * 60 * 60 * 24)
     );
 
+    //TODO: Fix the first view mail is not getting sent
     useEffect(() => {
         if(video.views === 0) {
             notifyFirstView()
@@ -49,6 +52,7 @@ const VideoPreview = ({videoId}: Props) => {
             notifyFirstView()
         }
     }, [])
+
 
   return (
     <div className='grid grid-cols-1 xl:grid-cols-3 p-10 px-16 lg:py-10 overflow-y-auto gap-5'>

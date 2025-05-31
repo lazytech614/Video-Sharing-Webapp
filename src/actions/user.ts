@@ -275,7 +275,6 @@ export const createCommentAndReply = async (
                         create: {
                             comment: comment,
                             userId: userId,
-                            videoId: videoId
                         }
                     }
                 }
