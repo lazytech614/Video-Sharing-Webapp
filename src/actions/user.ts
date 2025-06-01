@@ -3,6 +3,11 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { client } from "@/lib/prisma";
 import nodemailer from 'nodemailer';
+import Stripe from "stripe";
+
+const stripe = new Stripe(process.env.STRIPE_CLIENT_SECRET!, {
+    apiVersion: "2025-05-28.basil",
+})
 
 export const sendEmail = async (
     to: string,
@@ -502,5 +507,41 @@ export const acceptInvite = async (inviteId: string) => {
     }catch (err) {
         console.log("Error in the acceptInvite action", err);
         return {status: 500, message: "Something went wrong in acceptInvite action", data: null}
+    }
+}
+
+export const completeSubscription = async (sessionId: string) => {
+    try{
+        const user = await currentUser()
+        if(!user) 
+            return {status: 404, message: "User not found", data: null}
+
+        const session = await stripe.checkout.sessions.retrieve(sessionId)
+        if(!session) 
+            return {status: 404, message: "Session not found", data: null}
+        
+        const customer = await client.user.update({
+            where: {
+                clerkId: user.id
+            },
+            data: {
+                subscription: {
+                    update: {
+                        data: {
+                            customerId: session.customer as string,
+                            plan: "PRO"
+                        }
+                    }
+                }
+            }
+        })
+
+        if(customer) 
+            return {status: 200, message: "Subscription completed successfully", data: customer}
+        return {status: 400, message: "Subscription not completed", data: null}
+
+    }catch(err) {
+        console.log("Error in the completeSubscription action", err);
+        return {status: 500, message: "Something went wrong in completeSubscription action", data: null}
     }
 }
