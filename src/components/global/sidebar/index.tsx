@@ -35,13 +35,13 @@ import {
 import InfoBar from "../info-bar";
 import { useDispatch } from "react-redux";
 import { WORKSPACES } from "@/redux/slices/workspaces";
+import PaymentButton from "../payment-button";
 
 type Props = {
     activeWorkspaceId: string
 }
 
 const Sidebar = ({activeWorkspaceId}: Props) => {
-    //TODO: Make the upgrade button functional
 
     const router = useRouter();
     const pathname = usePathname();
@@ -146,7 +146,7 @@ const Sidebar = ({activeWorkspaceId}: Props) => {
             )
         }
          <nav className="w-full">
-            <ul className="h-[150px] overflow-auto overflow-x-hidden fade-layer space-y-2">
+            <ul className="max-h-[100px] overflow-auto overflow-x-hidden fade-layer space-y-2">
                 {workspace.workspace.length > 0 && workspace.workspace.map((item) => (
                     item.type !== 'PERSONAL' && (
                         <SidebarItem 
@@ -182,11 +182,12 @@ const Sidebar = ({activeWorkspaceId}: Props) => {
                     title="Upgrade Your Plan"
                     description="Upgrade to Pro to unlock AI features like transcript and summarization and more."
                 >
-                    <Button className="text-sm mt-2 w-full">
+                    {/* <Button className="text-sm mt-2 w-full">
                         <Loader state={false}>
                             <span>Upgrade Plan</span>
                         </Loader>
-                    </Button>
+                    </Button> */}
+                    <PaymentButton />
                 </CustomCard>
             )
          }
