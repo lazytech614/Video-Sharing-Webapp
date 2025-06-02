@@ -17,12 +17,12 @@ export async function POST(
                     upsert: {
                         create: {
                             screen: body?.screen,
-                            mic: body?.mic,
+                            mic: body?.audio,
                             preset: body?.preset
                         },
                             update: {
                             screen: body?.screen,
-                            mic: body?.mic,
+                            mic: body?.audio,
                             preset: body?.preset
                         }
                     },
