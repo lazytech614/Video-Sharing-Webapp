@@ -14,11 +14,18 @@ export async function POST(
             },
             data: {
                 studios: {
-                    update: {
-                        screen: body.screen,
-                        mic: body.mic,
-                        preset: body.preset
-                    }
+                    upsert: {
+                        create: {
+                            screen: body?.screen,
+                            mic: body?.mic,
+                            preset: body?.preset
+                        },
+                            update: {
+                            screen: body?.screen,
+                            mic: body?.mic,
+                            preset: body?.preset
+                        }
+                    },
                 }
             }
         })
