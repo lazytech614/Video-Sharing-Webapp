@@ -11,11 +11,12 @@ import Folders from '@/components/global/Folders'
 import Videos from '@/components/global/videos'
 
 type Props = {
-  params: {workspaceId: string}
+  params: Promise<{workspaceId: string}>
 }
 
 const WorkspaceIdPage = async ({ params }: Props) => {
-  
+  const { workspaceId } = await params
+
   return (
     <div>
       <Tabs defaultValue='videos' className='mt-6'>
@@ -36,14 +37,14 @@ const WorkspaceIdPage = async ({ params }: Props) => {
           </TabsList>
           <div className='flex gap-x-3'>
             <CreateWorkspace />
-            <CreateFolder workspaceId={params.workspaceId} />
+            <CreateFolder workspaceId={workspaceId} />
           </div>
         </div>
         <section className='py-9'>
           <TabsContent value='videos'>
-            <Folders workspaceId={params.workspaceId} />
+            <Folders workspaceId={workspaceId} />
             {/* TODO: Add logic to show first few videos or something like that */}
-            <Videos  folderId={params.workspaceId} workspaceId={params.workspaceId} videoKey=''/>
+            <Videos  folderId={workspaceId} workspaceId={workspaceId} videoKey=''/>
           </TabsContent>
         </section>
       </Tabs>
