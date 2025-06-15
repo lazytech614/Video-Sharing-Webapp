@@ -3,12 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
     req: NextRequest,
-    {params}: {params: {id: string}}
+    { params }: { params: Promise<{ id: string }>}
 ) {
     try {
+        const { id } = await params;
         const body = await req.json();
-        const {id} = params
-
         const completeProcessing = await client.video.update({
             where: {
                 userId: id,
