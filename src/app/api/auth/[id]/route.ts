@@ -2,8 +2,10 @@ import { client } from "@/lib/prisma";
 import { clerkClient } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function  GET(req: NextRequest, {params: {id}}: {params: {id: string}}) {
+export async function  GET(req: NextRequest, { params }: { params: Promise<{ id: string }>}) {
     try {       
+        const { id } = await params;
+        
         const userProfile = await client.user.findUnique({
             where: {
                 clerkId: id,
