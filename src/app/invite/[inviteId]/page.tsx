@@ -3,12 +3,13 @@ import { redirect } from 'next/navigation'
 import React from 'react'
 
 type Props = {
-    params: {
+    params: Promise<{
         inviteId: string
-    }
+    }>
 }
 
-const InvitePage = async ({params: {inviteId}}: Props) => {
+const InvitePage = async ({params}: Props) => {
+    const { inviteId } = await params
     const invite = await acceptInvite(inviteId)
 
     if(invite.status === 404)

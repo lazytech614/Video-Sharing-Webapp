@@ -3,15 +3,16 @@ import { redirect } from 'next/navigation'
 import React from 'react'
 
 type Props = {
-    searchParams: {
+    searchParams: Promise<{
         session_id?: string, 
         cancel?: boolean
-    }
+    }>
 }
 
 const PaymentPage = async ({
-    searchParams: {session_id, cancel}
+    searchParams
 }: Props) => {
+    const { session_id, cancel } = await searchParams
     if(session_id) {
         const customer = await completeSubscription(session_id)
 
