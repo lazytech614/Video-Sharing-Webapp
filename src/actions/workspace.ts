@@ -3,6 +3,8 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { client } from "@/lib/prisma";
 import { sendEmail } from "./user";
+import {createClient, OAuthStrategy } from "@wix/sdk"
+import {items} from "@wix/data"
 
 export const verifyAccessToWorkspace = async (workspaceId: string) => {
     try{
@@ -523,5 +525,179 @@ export const editVideoInfo = async (videoId: string, title: string, description:
   } catch (err) {
     console.log("Error in the editVideoInfo action", err);
     return { status: 500, message: (err as Error).message || "Something went wrong", data: null };
+  }
+}
+
+// export const getWixContent = async () => {
+//   try {
+//     const myWixClient = createClient({
+//       modules: {items},
+//       auth: OAuthStrategy({
+//         clientId: process.env.WIX_CLIENT_ID! as string,
+//       })
+//     })
+
+//     const videos = await (myWixClient.items as any).queryDataItems({
+//       dataCollectionId: "nuevue"
+//     }).find()
+
+//     const videoIds = videos.items.map((video: any) => video.data?.id)
+
+//     const video = await client.video.findMany({
+//       where: {
+//         id: {
+//           in: videoIds
+//         }
+//       },
+//       select: {
+//         id: true,
+//         createdAt: true,
+//         title: true,
+//         description: true,
+//         source: true,
+//         processing: true,
+//         workSpaceId: true,
+//         user: {
+//           select: {
+//             firstName: true,
+//             lastName: true,
+//             email: true,
+//             image: true,
+//             clerkId: true,
+//             trial: true,
+//             subscription: {
+//               select: {
+//                 plan: true
+//               }
+//             }
+//           }
+//         },
+//         folder: {
+//           select: {
+//             name: true,
+//             id: true
+//           }
+//         }
+//       }
+//     })
+
+//     if(video && video.length > 0) {
+//       console.log("Videos", video);
+//       return {status: 200, message: "Videos found successfully", data: video}
+//     }else {
+//       return {status: 404, message: "Videos not found", data: null}
+//     }
+//   }catch(err) {
+//     console.log("Error in the getWixContent action", err);
+//     return { status: 500, message: (err as Error).message || "Something went wrong", data: null };
+//   }
+// }
+
+export const getWixContent = async () => {
+  try {
+    const myWixClient = createClient({
+      modules: { items },
+      auth: OAuthStrategy({
+        clientId: process.env.WIX_CLIENT_ID! as string,
+      })
+    });
+
+    console.log('Wix client created:', myWixClient);
+    console.log('Items module methods:', Object.getOwnPropertyNames(myWixClient.items));
+
+    // Try different method names based on Wix SDK version
+    let videos;
+    
+    if (typeof myWixClient.items.query === 'function') {
+      // Newer SDK version
+      videos = await myWixClient.items.query("nuevue").find();
+    } else if (typeof (myWixClient.items as any).queryDataItems === 'function') {
+      // Your original approach
+      videos = await (myWixClient.items as any).queryDataItems({
+        dataCollectionId: "nuevue"
+      }).find();
+    } else if (typeof (myWixClient.items as any).queryItems === 'function') {
+      // Alternative method name
+      videos = await (myWixClient.items as any).queryItems("nuevue").find();
+    } else {
+      throw new Error('No suitable query method found on items module');
+    }
+
+    console.log('Wix videos response:', videos);
+
+    if (!videos || !videos.items || videos.items.length === 0) {
+      return { status: 404, message: "No videos found in Wix", data: null };
+    }
+
+    const videoIds = videos.items
+      .map((video: any) => video.title)
+      .filter((id: any) => id); // Filter out undefined/null ids
+
+    if (videoIds.length === 0) {
+      return { status: 404, message: "No valid video IDs found", data: null };
+    }
+
+    console.log('Video IDs from Wix:', videoIds);
+
+    const video = await client.video.findMany({
+      where: {
+        id: {
+          in: videoIds
+        }
+      },
+      select: {
+        id: true,
+        createdAt: true,
+        title: true,
+        description: true,
+        source: true,
+        processing: true,
+        workSpaceId: true,
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+            email: true,
+            image: true,
+            clerkId: true,
+            trial: true,
+            subscription: {
+              select: {
+                plan: true
+              }
+            }
+          }
+        },
+        folder: {
+          select: {
+            name: true,
+            id: true
+          }
+        }
+      }
+    });
+
+    if (video && video.length > 0) {
+      console.log("Videos found:", video);
+      return { status: 200, message: "Videos found successfully", data: video };
+    } else {
+      return { status: 404, message: "Videos not found in database", data: null };
+    }
+
+  } catch (err) {
+    console.error("Error in the getWixContent action", err);
+    
+    // More detailed error logging
+    if (err instanceof Error) {
+      console.error("Error name:", err.name);
+      console.error("Error message:", err.message);
+      console.error("Error stack:", err.stack);
+    }
+    
+    return { 
+      status: 500, 
+      message: (err as Error).message || "Something went wrong", 
+      data: null 
+    };
   }
 }
