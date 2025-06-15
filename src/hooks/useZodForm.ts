@@ -26,6 +26,7 @@ export const useZodForm = (
     watch, 
     reset, 
     errors,
-    onFormSubmit
+    onFormSubmit,
+    handleSubmit
   }
 }

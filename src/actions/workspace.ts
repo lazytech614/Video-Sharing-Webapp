@@ -382,7 +382,7 @@ export const getPreviewVideo = async (videoId: string) => {
         status: 200, 
         message: "Video found", 
         data: video, 
-        autor: user.id === video?.user?.clerkId ? true : false 
+        author: user.id === video?.user?.clerkId ? true : false 
       };
     } else {
       return { 
@@ -494,6 +494,34 @@ export const sendEmailForFirstView = async (videoId: string) => {
     })
   } catch (err) {
     console.log("Error in the sendEmailForFirstView action", err);
+    return { status: 500, message: (err as Error).message || "Something went wrong", data: null };
+  }
+}
+
+export const editVideoInfo = async (videoId: string, title: string, description: string) => {
+  try {
+    console.log("Video id: ", videoId);
+    console.log("Title: ", title, "Description: ", description);
+    const video = await client.video.update({
+      where: {
+        id: videoId
+      },
+      data: {
+        title: title,
+        description: description,
+      }
+    })
+    if(video) {
+      console.log("Video info updated successfully");
+      return {status: 200, message: "Video info updated successfully", data: video}
+    }
+    else {
+      console.log("Failed to update video info");
+      return {status: 404, message: "Video not found", data: null}
+    }
+      
+  } catch (err) {
+    console.log("Error in the editVideoInfo action", err);
     return { status: 500, message: (err as Error).message || "Something went wrong", data: null };
   }
 }

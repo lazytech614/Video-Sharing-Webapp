@@ -14,6 +14,7 @@ import TabMenu from '../../tabs';
 import AiTools from '../../ai-tools';
 import VideoTranscript from '../../video-transcript';
 import Activity from '../../activity';
+import EditVideo from '../edit';
 
 type Props = {
     videoId: string
@@ -28,11 +29,13 @@ const VideoPreview = ({videoId}: Props) => {
         () => getPreviewVideo(videoId),
     )
 
+    // console.log(data);
+
     const notifyFirstView = async () => await sendEmailForFirstView(videoId)
 
     const {data: video, status, author} = data as VideoProps
 
-    console.log("Video: ", video);
+    // console.log("Author: ", author, "Video: ", video);
 
     if(status !== 200) 
         router.push('/')
@@ -42,7 +45,6 @@ const VideoPreview = ({videoId}: Props) => {
     (Date.now() - createdDate.getTime()) / (1000 * 60 * 60 * 24)
     );
 
-    //TODO: Fix the first view mail is not getting sent
     useEffect(() => {
         if(video.views === 0) {
             notifyFirstView()
@@ -60,7 +62,7 @@ const VideoPreview = ({videoId}: Props) => {
             <div>
                 <div className='flex gap-x-5 items-start justify-between'>
                     <h2 className='text-white text-4xl font-bold'>{video.title}</h2>
-                    {/* {author ? (
+                    {author ? (
                         <EditVideo 
                             videoId={video.id}
                             title={video.title as string}
@@ -68,7 +70,7 @@ const VideoPreview = ({videoId}: Props) => {
                         />
                     ) : (
                         <></>
-                    )} */}
+                    )}
                 </div>
                 <span className='flex gap-x-3 mt-4'>
                     <p className='text-[#9d9d9d] capitalize'>
@@ -89,7 +91,7 @@ const VideoPreview = ({videoId}: Props) => {
             <div className='flex flex-col gap-y-4 text-2xl'>
                 <div className='flex gap-x-5 items-center justify-between'>
                     <p className='text-[#bdbdbd] font-semibold'>Description</p>
-                    {/* {author ? (
+                    {author ? (
                         <EditVideo 
                             videoId={video.id}
                             title={video.title as string}
@@ -97,7 +99,7 @@ const VideoPreview = ({videoId}: Props) => {
                         />
                     ) : (
                         <></>
-                    )} */}
+                    )}
                 </div>
                 <p className='text-[#9d9d9d] text-lg font-medium'>{video.description}</p>
             </div>
@@ -133,7 +135,7 @@ const VideoPreview = ({videoId}: Props) => {
                         videoId={videoId}
                     />
                     <VideoTranscript 
-                        transcript={video.description} 
+                        transcript={video.summary} 
                     />
                     <Activity 
                         author={video.user?.firstName as string}

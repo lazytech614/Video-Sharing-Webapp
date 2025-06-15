@@ -96,6 +96,7 @@ export type VideoProps = {
         description: string | null,
         source: string,
         views: number,
+        id: string,
         createdAt: Date,
         summary: string,
 

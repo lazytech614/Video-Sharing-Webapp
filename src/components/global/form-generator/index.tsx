@@ -15,6 +15,7 @@ type Props = {
     errors: FieldErrors<FieldValues>; // Errors from react-hook-form
     required?: boolean; 
     lines?: number; // For textarea input
+    defaultValue?: string; // initial value for controlled fields
 }
 
 const FormGenerator = ({
@@ -27,7 +28,8 @@ const FormGenerator = ({
     register,
     errors,
     required,
-    lines = 1
+    lines = 1,
+    defaultValue = ''
 }: Props) => {
     switch (inputType) {
         case "input": 
@@ -41,6 +43,7 @@ const FormGenerator = ({
                         id={`input-${label}`}
                         type={type || 'text'}
                         placeholder={placeholder}
+                        defaultValue={defaultValue}
                         {...register(name)}
                         className='bg-transparent border-themeGray text-themeTextGray'
                     />
@@ -65,10 +68,11 @@ const FormGenerator = ({
                     {label && label}
                     <select 
                         id={`select-${label}`}
+                        defaultValue={defaultValue}
                         {...register(name)}
                         className='w-full bg-transparent border-[1px] p-3 rounded-lg'
                     >
-                        {options?.length && options?.map((option) => (
+                        {options?.map((option) => (
                             <option 
                                 key={option.id}
                                 value={option.value}
@@ -100,6 +104,7 @@ const FormGenerator = ({
                     <textarea 
                         id={`textarea-${label}`}
                         placeholder={placeholder}
+                        defaultValue={defaultValue}
                         {...register(name)}
                         rows={lines}
                         className='bg-transparent border-themeGray text-themeTextGray'
@@ -115,6 +120,8 @@ const FormGenerator = ({
                     />
                 </Label>
             )
+        default:
+            return null;
     }
 }
 
