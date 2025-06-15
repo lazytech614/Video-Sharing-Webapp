@@ -26,7 +26,6 @@ import { getNotifications } from "@/actions/user";
 import WorkspacePlaceholder from "./workspace-placeholder";
 import CustomCard from "../custom-card";
 import { Button } from "@/components/ui/button";
-import Loader from "../loader";
 import { 
     Sheet, 
     SheetContent, 
@@ -152,7 +151,7 @@ const Sidebar = ({activeWorkspaceId}: Props) => {
                         <SidebarItem 
                             href={`/dashboard/${item.id}`}
                             key={item.id}
-                            icon={<WorkspacePlaceholder children={item.name.charAt(0).toUpperCase()} />}
+                            icon={<WorkspacePlaceholder>{item.name.charAt(0).toUpperCase()}</WorkspacePlaceholder>}
                             title={item.name}
                             notifications={0}
                             selected={pathname === `/dashboard/${item.id}`}
@@ -165,7 +164,7 @@ const Sidebar = ({activeWorkspaceId}: Props) => {
                             <SidebarItem 
                                 href={`/dashboard/${item.workSpace.id}`}
                                 key={item.workSpace.id}
-                                icon={<WorkspacePlaceholder children={item.workSpace.name.charAt(0).toUpperCase()} />}
+                                icon={<WorkspacePlaceholder>{item.workSpace.name.charAt(0).toUpperCase()}</WorkspacePlaceholder>}
                                 title={item.workSpace.name}
                                 notifications={0}
                                 selected={pathname === `/dashboard/${item.workSpace.id}`}

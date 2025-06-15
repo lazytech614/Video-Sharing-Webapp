@@ -17,7 +17,6 @@ const ChangeVideolocation = ({
     videoId,
     currentWorkspace,
     currentFolder,
-    currentFolderName
 }: Props) => {
     const {
         register,

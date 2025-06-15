@@ -9,8 +9,6 @@ import CreateWorkspace from '@/components/global/create-workspace'
 import CreateFolder from '@/components/global/create-folder'
 import Folders from '@/components/global/Folders'
 import Videos from '@/components/global/videos'
-import { onAuthenticateUser } from '@/actions/user'
-
 
 type Props = {
   params: {workspaceId: string}

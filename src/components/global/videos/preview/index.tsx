@@ -130,7 +130,7 @@ const VideoPreview = ({videoId}: Props) => {
                     ]}
                 >
                     <AiTools 
-                        plan={'PRO'}
+                        plan='PRO'
                         trial={true}
                         videoId={videoId}
                     />

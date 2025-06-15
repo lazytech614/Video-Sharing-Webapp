@@ -2,9 +2,7 @@ import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
 import React from 'react'
 
-type Props = {}
-
-const PaymentMethod = (props: Props) => {
+const PaymentMethod = () => {
   return (
     <div className='bg-[#1d1d1d] p-5 rounded-xl flex flex-col gap-y-8'>
         <div className='flex justify-between items-start'>

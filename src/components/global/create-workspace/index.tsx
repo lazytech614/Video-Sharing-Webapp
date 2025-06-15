@@ -8,9 +8,7 @@ import { Button } from '@/components/ui/button';
 import { FolderPlusIcon } from 'lucide-react';
 import WorkspaceForm from '../forms/workspace-form';
 
-type Props = {}
-
-const CreateWorkspace = (props: Props) => {
+const CreateWorkspace = () => {
     const { data } = useQueryData(["user-workspaces"], getWorkspaces)
     const {data: plan} = data as {
         status: number,

@@ -31,6 +31,7 @@ export async function POST(
         console.log("🔴 Video transcription failed");
         return NextResponse.json({status: 400, message: "Video transcription failed", data: null}, {status: 400})
     }catch(err) {
-
+        console.log("Error in the transcribeVideo api endpoint", err);
+        return NextResponse.json({status: 500, message: (err as Error).message || "Something went wrong", data: null}, {status: 500})
     }
 }

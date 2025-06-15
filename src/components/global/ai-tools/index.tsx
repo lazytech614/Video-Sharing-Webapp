@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import { TabsContent } from '@/components/ui/tabs'
 import React from 'react'
 import Loader from '../loader'
-import { Bot, Captions, Download, FileTextIcon, Pencil, StarsIcon, Video } from 'lucide-react'
+import { Bot, FileTextIcon, Pencil, StarsIcon } from 'lucide-react'
 
 type Props = {
     plan: 'PRO' | 'FREE',

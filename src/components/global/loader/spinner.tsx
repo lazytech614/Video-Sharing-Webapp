@@ -1,8 +1,7 @@
 import React from 'react'
 
-type Props = {}
-
-const Spinner = (props: Props) => {
+//TODO: Make the spinner component
+const Spinner = () => {
   return (
     <div>Spinner</div>
   )

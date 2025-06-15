@@ -27,7 +27,6 @@ const FormGenerator = ({
     name,
     register,
     errors,
-    required,
     lines = 1,
     defaultValue = ''
 }: Props) => {

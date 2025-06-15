@@ -1,9 +1,7 @@
 import { onAuthenticateUser } from '@/actions/user'
 import { redirect } from 'next/navigation'
 
-type Props = {}
-
-const AuthCallbackPage = async (props: Props) => {
+const AuthCallbackPage = async () => {
     const auth = await onAuthenticateUser()
 
     if(auth.status === 200 || auth.status === 201) 

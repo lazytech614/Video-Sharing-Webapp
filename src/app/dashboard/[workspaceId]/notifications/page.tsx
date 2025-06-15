@@ -7,9 +7,7 @@ import { useQueryData } from '@/hooks/useQueryData'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { User2 } from 'lucide-react'
 
-type Props = {}
-
-const NotificationsPage = (props: Props) => {
+const NotificationsPage = () => {
     const {data: notifications} = useQueryData(
         ['user-notifications'],
         getNotifications

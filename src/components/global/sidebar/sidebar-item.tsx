@@ -15,7 +15,6 @@ const SidebarItem = ({
     title,
     href,
     selected,
-    notifications
 }: Props) => {
   return (
     <li className='cursor-pointer my-[5px]'>

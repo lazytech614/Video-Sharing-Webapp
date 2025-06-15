@@ -3,9 +3,7 @@ import { Button } from '@/components/ui/button'
 import { X } from 'lucide-react'
 import React from 'react'
 
-type Props = {}
-
-const BillingOverview = async (props: Props) => {
+const BillingOverview = async () => {
     const {data: payment} = await getPaymentInfo()
 
   return (

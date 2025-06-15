@@ -1,8 +1,6 @@
 import Spinner from "@/components/global/loader/spinner"
 
-type Props = {}
-
-const AuthLoading = (props: Props) => {
+const AuthLoading = () => {
   return (
     <div className="flex min-h-screen justify-center items-center">
         <Spinner />

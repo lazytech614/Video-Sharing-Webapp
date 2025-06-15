@@ -11,9 +11,7 @@ import { useTheme } from 'next-themes'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
-type Props = {}
-
-const SettingsPage = (props: Props) => {
+const SettingsPage = () => {
     const [firstView, setFirstView] = useState<undefined | boolean>(undefined)
 
     //TODO: Implement the functionality to change the theme

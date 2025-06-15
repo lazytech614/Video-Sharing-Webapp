@@ -1,6 +1,6 @@
 "use client"
 
-import { use, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useQueryData } from "./useQueryData"
 import { searchUsers } from "@/actions/user"
 
@@ -51,9 +51,6 @@ export const useSearch = (key: string, type: "USERS") => {
             refetch()
         if(!debounce) 
             setOnUsers(undefined)
-        return () => {
-            debounce
-        }
     }, [debounce])
 
     return { onUsers, onSearchQuery, isFetching, query }

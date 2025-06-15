@@ -135,6 +135,7 @@ export const getNotifications = async () => {
         else 
             return {status: 404, message: "Notifications not found", data: []}
     }catch(err) {
+        console.log("Something went wrong in the getNotifications action", err);
         return {status: 403, message: "Something went wrong", data: []}
     }
 }
@@ -412,7 +413,7 @@ export const inviteMembers = async (
                     }
                 })
 
-                const notification = await client.user.update({
+                await client.user.update({
                     where: {
                         clerkId: user.id,
                     },

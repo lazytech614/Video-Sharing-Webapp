@@ -4,9 +4,7 @@ import FormGenerator from '../../form-generator'
 import { Button } from '@/components/ui/button'
 import Loader from '../../loader'
 
-type Props = {}
-
-const WorkspaceForm = (props: Props) => {
+const WorkspaceForm = () => {
   const {errors, onFormSubmit, register, isPending} = useCreateWorkspace()
 
   return (

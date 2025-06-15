@@ -1,7 +1,7 @@
 "use client"
 
 import { useVideoComment } from '@/hooks/useVideoComment'
-import { Send, X } from 'lucide-react'
+import { Send } from 'lucide-react'
 import React from 'react'
 import FormGenerator from '../../form-generator'
 import { Button } from '@/components/ui/button'
@@ -14,10 +14,9 @@ type Props = {
     close?: () => void
 }
 
-const CommentForm = ({videoId, commentId, author, close}: Props) => {
+const CommentForm = ({videoId, commentId, author}: Props) => {
     const {
         register,
-        reset,
         onFormSubmit,
         errors,
         isPending

@@ -4,9 +4,7 @@ import { UserButton } from '@clerk/nextjs'
 import { Search, UploadIcon, VideoIcon } from 'lucide-react'
 import React from 'react'
 
-type Props = {}
-
-const InfoBar = (props: Props) => {
+const InfoBar = () => {
     //TODO: Implement search functionality
     //TODO: Implement upload functionality
     //TODO: Implement record functionality

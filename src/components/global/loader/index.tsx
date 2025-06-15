@@ -10,8 +10,6 @@ type Props = {
 
 const Loader = ({
     state,
-    className,
-    color,
     children
 }: Props) => {
     if(state) 
