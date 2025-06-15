@@ -458,8 +458,6 @@ export const sendEmailForFirstView = async (videoId: string) => {
         }
       })
     }
-    
-
 
     const {transporter, mailOptions} = await sendEmail(
       video.user?.email!,
@@ -527,71 +525,6 @@ export const editVideoInfo = async (videoId: string, title: string, description:
     return { status: 500, message: (err as Error).message || "Something went wrong", data: null };
   }
 }
-
-// export const getWixContent = async () => {
-//   try {
-//     const myWixClient = createClient({
-//       modules: {items},
-//       auth: OAuthStrategy({
-//         clientId: process.env.WIX_CLIENT_ID! as string,
-//       })
-//     })
-
-//     const videos = await (myWixClient.items as any).queryDataItems({
-//       dataCollectionId: "nuevue"
-//     }).find()
-
-//     const videoIds = videos.items.map((video: any) => video.data?.id)
-
-//     const video = await client.video.findMany({
-//       where: {
-//         id: {
-//           in: videoIds
-//         }
-//       },
-//       select: {
-//         id: true,
-//         createdAt: true,
-//         title: true,
-//         description: true,
-//         source: true,
-//         processing: true,
-//         workSpaceId: true,
-//         user: {
-//           select: {
-//             firstName: true,
-//             lastName: true,
-//             email: true,
-//             image: true,
-//             clerkId: true,
-//             trial: true,
-//             subscription: {
-//               select: {
-//                 plan: true
-//               }
-//             }
-//           }
-//         },
-//         folder: {
-//           select: {
-//             name: true,
-//             id: true
-//           }
-//         }
-//       }
-//     })
-
-//     if(video && video.length > 0) {
-//       console.log("Videos", video);
-//       return {status: 200, message: "Videos found successfully", data: video}
-//     }else {
-//       return {status: 404, message: "Videos not found", data: null}
-//     }
-//   }catch(err) {
-//     console.log("Error in the getWixContent action", err);
-//     return { status: 500, message: (err as Error).message || "Something went wrong", data: null };
-//   }
-// }
 
 export const getWixContent = async () => {
   try {
