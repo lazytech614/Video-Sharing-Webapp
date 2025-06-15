@@ -3,11 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
     req: NextRequest,
-    {params: {id}}: {params: {id: string}}
+    { params }: { params: Promise<{ id: string }>}
 ) {
     try {
         const body = await req.json();
-    
+        const {id} = await params
         const studio = await client.user.update({
             where: {
                 id
