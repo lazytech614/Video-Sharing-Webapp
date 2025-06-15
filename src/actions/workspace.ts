@@ -5,6 +5,8 @@ import { client } from "@/lib/prisma";
 import { sendEmail } from "./user";
 import {createClient, OAuthStrategy } from "@wix/sdk"
 import {items} from "@wix/data"
+import axios from "axios";
+import { title } from "process";
 
 export const verifyAccessToWorkspace = async (workspaceId: string) => {
     try{
@@ -632,5 +634,20 @@ export const getWixContent = async () => {
       message: (err as Error).message || "Something went wrong", 
       data: null 
     };
+  }
+}
+
+export const howToPost = async () => {
+  try {
+    const response = await axios.get(process.env.CLOUDWAYS_POST as string);
+
+    if(response.data) {
+      return {
+        title: response.data[0].title.rendered, content: response.data[0].content.rendered
+      }
+    }
+  } catch (err) {
+    console.log("Error in the howToPost action", err);
+    return { status: 500, message: (err as Error).message || "Something went wrong", data: null };
   }
 }
