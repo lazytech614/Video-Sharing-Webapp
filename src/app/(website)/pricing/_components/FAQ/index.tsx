@@ -1,4 +1,4 @@
-import { FAQs } from "@/constants";
+import { FAQs } from "@/constants/pricing-page";
 
 const FAQ = () => {
   return (

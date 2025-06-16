@@ -1,7 +1,7 @@
 import FAQ from "./_components/FAQ";
 import FeaturesComparison from "./_components/feature-comparison";
 import PricingCard from "./_components/pricing-card";
-import { PRICING_PLANS } from "@/constants";
+import { PRICING_PLANS } from "@/constants/pricing-page";
 
 const PricingPage = () => {
   return (
