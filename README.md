@@ -190,10 +190,6 @@ npm run test:watch
 - **Image Optimization**: Next.js automatic image optimization
 - **Caching**: Redis caching for improved performance
 
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## 🙏 Acknowledgments
 
 - Next.js team for the amazing framework
