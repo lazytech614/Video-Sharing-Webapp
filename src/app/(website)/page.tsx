@@ -14,7 +14,6 @@ const NuevueLandingPage = () => {
       <Stats />
       <Testimonials />
       <CTA />
-      <Footer />
     </main>
   );
 };
