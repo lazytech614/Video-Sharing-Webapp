@@ -4,7 +4,6 @@ import Feature from './_components/feature';
 import Stats from './_components/stats';
 import Testimonials from './_components/testimonials';
 import CTA from './_components/cta';
-import Footer from './_components/footer';
 
 const NuevueLandingPage = () => {
   return (
