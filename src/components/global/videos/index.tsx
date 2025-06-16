@@ -42,7 +42,7 @@ const Videos = ({folderId, workspaceId, videoKey}: Props) => {
     <div className='flex flex-col gap-4 mt-4'>
         <div className='flex items-center justify-between'>
             <div className='flex items-center gap-4'>
-                <Video className='text-[#707070]' />
+                <Video className='text-[#bdbdbd]' />
                 <h2 className='text-[#bdbdbd] text-xl'>Videos</h2>
             </div>
         </div>

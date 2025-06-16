@@ -65,8 +65,8 @@ const Sidebar = ({activeWorkspaceId}: Props) => {
     }
 
   const SidebarSection = (
-    <div className="bg-[#111111] flex-none relative p-4 h-full w-[250px] flex flex-col items-center gap-y-4  overflow-hidden">
-        <div className="bg-[#111111] p-4 flex justify-center items-center gap-x-2 mb-4 absolute top-0 left-0 right-0">
+    <div className="bg-gradient-to-b from-[#252033] to-[#1a1825] flex-none relative p-4 h-full w-[250px] flex flex-col items-center gap-y-4  overflow-hidden">
+        <div className="bg-[#252033] p-4 flex justify-center items-center gap-x-2 mb-4 absolute top-0 left-0 right-0">
             <Image src={logo} alt="logo" width={40} height={40} />
             <p className="text-2xl font-bold">Nuevue</p>
          </div>
@@ -74,7 +74,7 @@ const Sidebar = ({activeWorkspaceId}: Props) => {
             defaultValue={activeWorkspaceId} 
             onValueChange={onChangeActiveWorkspace}
         >
-             <SelectTrigger className="mt-16 text-neutral-400 bg-transparent">
+             <SelectTrigger className="mt-16 text-neutral-400 bg-transparent border-[0.5px] border-white">
                 <SelectValue placeholder="Select a workspace"></SelectValue>
              </SelectTrigger>
              <SelectContent className="bg-[#111111] backdrop-blur-xl">
@@ -116,7 +116,7 @@ const Sidebar = ({activeWorkspaceId}: Props) => {
                 <Search workspaceId={activeWorkspaceId} />
             </Modal>
          )}
-         <p className="w-full text-[#9d9d9d] font-bold mt-4">Menu</p>
+         <p className="w-full text-[#bdbdbd] font-bold mt-4">Menu</p>
          <nav className="w-full">
             <ul>
                 {menuItems.map((item) => (
@@ -133,8 +133,8 @@ const Sidebar = ({activeWorkspaceId}: Props) => {
                 ))}
             </ul>
          </nav>
-         <Separator className="w-4/5" />
-         <p className="w-full text-[#9d9d9d] font-bold mt-4">Workspaces</p>
+         <Separator className="w-4/5 bg-[#9d9d9d39]" />
+         <p className="w-full text-[#bdbdbd] font-bold mt-4">Workspaces</p>
          {
             workspace.workspace.length === 1 && workspace.members.length === 0 && (
                 <div className="w-full flex items-center justify-center">
@@ -174,7 +174,7 @@ const Sidebar = ({activeWorkspaceId}: Props) => {
                 }
             </ul>
          </nav>
-         <Separator className="w-4/5" />
+         <Separator className="w-4/5 bg-[#9d9d9d39]" />
          {
             workspace.subscription?.plan === 'FREE' && (
                 <CustomCard

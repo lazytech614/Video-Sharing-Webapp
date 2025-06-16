@@ -15,6 +15,7 @@ import {
 import { getNotifications } from '@/actions/user'
 import Sidebar from '@/components/global/sidebar'
 import GlobalHeader from '@/components/global/global-header'
+import BackgroundEffect from '@/app/(website)/_components/hero/backgroud-effect'
 
 type Props = {
     params: {
@@ -60,9 +61,10 @@ const Layout = async ({
 
     return (
         <HydrationBoundary state={dehydrate(query)}>
-            <div className='flex h-screen w-screen'>
+            <div className='flex h-screen w-screen bg-gradient-to-br from-gray-900 via-purple-900 to-violet-900'>
                 <Sidebar activeWorkspaceId = {workspaceId} />
-                <div className='w-full pt-28 p-6 overflow-y-scroll overflow-x-hidden'>
+                <div className='relative w-full pt-28 p-6 overflow-y-scroll overflow-x-hidden'>
+                    <BackgroundEffect />
                     <GlobalHeader workspace={hasAccess.data} />
                     <div className='mt-4'>{children}</div>
                 </div>

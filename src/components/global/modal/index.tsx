@@ -28,7 +28,7 @@ const Modal = ({
         <DialogTrigger className={className} asChild>
             {trigger}
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className='bg-gradient-to-b from-[#252033] to-[#1a1825]'>
             <DialogHeader>
                 <DialogTitle>{title}</DialogTitle>
                 <DialogDescription>{description}</DialogDescription>

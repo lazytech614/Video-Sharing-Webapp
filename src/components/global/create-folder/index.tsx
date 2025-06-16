@@ -13,9 +13,9 @@ const CreateFolder = ({ workspaceId }: Props) => {
   const {onCreateNewFolder} = useCreateFolder(workspaceId)
 
   return (
-    <Button onClick={onCreateNewFolder} className='bg-[#1d1d1d] text-[#707070] flex items-center gap-2 py-6 px-4 rounded-2xl'>
+    <Button onClick={onCreateNewFolder} className='z-[20] border border-purple-400 bg-purple-400/10 hover:bg-purple-400/20 text-white flex items-center gap-2 py-6 px-4 rounded-2xl'>
       <FolderPlusIcon size={20} />
-      <span className='text-[#bdbdbd]'>Create Folder</span>
+      <span className='text-white'>Create Folder</span>
     </Button>
   )
 }

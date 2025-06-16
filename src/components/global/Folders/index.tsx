@@ -64,10 +64,10 @@ const Folders = ({workspaceId}: Props) => {
   //TODO: Add the classnames for the folder based on success response or error response
 
   return (
-    <div className='flex flex-col gap-4'>
+    <div className='z-[20] relative flex flex-col gap-4'>
       <div className='flex items-center justify-between'>
         <div className='flex items-center gap-4'>
-          <FolderIcon size={20} className='text-[#707070]' />
+          <FolderIcon size={20} className='text-[#bdbdbd]' />
           <h2 className='text-[#bdbdbd] text-xl'>Folders</h2>
         </div>
         <div className='flex items-center gap-2 cursor-pointer'>
@@ -75,7 +75,7 @@ const Folders = ({workspaceId}: Props) => {
           <ArrowRight size={20} className='text-[#707070]'/>
         </div>
       </div>
-      <section className={cn(status !==200 && "justify-center",  `flex items-center gap-4 overflow-x-auto w-full`)}>
+      <section className={cn(status !==200 && "justify-center", `flex items-center gap-4 overflow-x-auto w-full`)}>
         {status !== 200 ? 
           <p className='text-neutral-300'>No Folders</p> : 
           <>

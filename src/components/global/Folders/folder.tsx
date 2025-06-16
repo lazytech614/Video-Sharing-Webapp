@@ -63,7 +63,7 @@ const Folder = ({name, id, optimistic, count}: Props) => {
     <div 
         onClick={handleFolderClick} 
         ref={folderCardRef}
-        className={cn( optimistic && "opacity-60", `flex hover:bg-neutral-800 cursor-pointer transition duration-150 items-center gap-2 justify-between min-w-[250px] py-4 px-4 rounded-lg border-[1px]`)}>
+        className={cn( optimistic && "opacity-60", `flex hover:bg-purple-400/10 cursor-pointer transition duration-150 items-center gap-2 justify-between min-w-[250px] py-4 px-4 rounded-lg border-[1px] border-purple-400`)}>
         <Loader state={isPending}>
             <div className='flex flex-col gap-[1px]'>
                 {onRename ? 
@@ -85,7 +85,7 @@ const Folder = ({name, id, optimistic, count}: Props) => {
                 <span className='text-sm text-neutral-500'>{count || 0} Videos</span>
             </div>
         </Loader>
-        <FolderIcon size={20} className='text-[#707070]' />
+        <FolderIcon size={20} className='text-[#fff]' />
     </div>
   )
 }

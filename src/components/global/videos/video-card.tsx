@@ -46,7 +46,7 @@ const VideoCard = (props: Props) => {
 
   return (
     <Loader state={props.processing} className='bg-[#171717] flex justify-center items-center border-[1px] border-[#252525] rounded-xl'>
-        <div className='group overflow-hidden cursor-pointer bg-[#171717] relative border-[1px] border-[#252525] flex flex-col rounded-xl'>
+        <div className='group overflow-hidden cursor-pointer relative bg-[#171717] border-[1px] border-[#252525] flex flex-col rounded-xl'>
             <div className='absolute top-3 right-3 gap-y-3 z-50 gap-x-3 hidden group-hover:flex'>
                 <VideoCardMenu
                     videoId={props.id}
@@ -61,21 +61,20 @@ const VideoCard = (props: Props) => {
                 />
             </div>
             <Link
-                //TODO: update the href
                 href={`/preview/${props.id}`}
                 className='hover:bg-[#252525] transition duration-150 flex flex-col justify-between h-full'
             >
                 <video
                     controls={false}
                     preload='metadata'
-                    className='w-full aspevio-video opacity-50 z-20'
+                    className='w-full aspect-video opacity-50 z-20'
                 >
                     <source
                         src={`${process.env.NEXT_PUBLIC_CLOUD_FRONT_STREAM_URL}/${props.source}#t=1`}
                     />
                 </video>
-                <div className='px-5 py-3 flex flex-col gap-y-2 z-20'>
-                    <h2 className='text-sm font-semibold text-[#bdbdbd]'>{props.title}</h2>
+                <div className='px-5 py-3 flex flex-col gap-y-2 z-20 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700'>
+                    <h2 className='text-sm font-semibold text-[#fff]'>{props.title}</h2>
                     <div className='flex gap-x-2 items-center mt-2'>
                         <Avatar className='h-8 w-8'>
                             <AvatarImage 
@@ -86,8 +85,8 @@ const VideoCard = (props: Props) => {
                             </AvatarFallback>
                         </Avatar>
                         <div>
-                            <p className='capitalize text-xs text-[#bdbdbd]'>{props.user?.firstName} {props.user?.lastName}</p>
-                            <p className='flex items-center text-[#6b6b6b] text-xs'><Dot /> {daysAgo === 0 ? 'Today' : `${daysAgo} days ago`}</p>
+                            <p className='capitalize text-xs text-[#fff]'>{props.user?.firstName} {props.user?.lastName}</p>
+                            <p className='flex items-center text-[#bdbdbd] text-xs'><Dot /> {daysAgo === 0 ? 'Today' : `${daysAgo} days ago`}</p>
                         </div>
                     </div>
                     <div className='mt-2'>
@@ -97,7 +96,7 @@ const VideoCard = (props: Props) => {
                                 className='text-[#9d9d9d]'
                                 fill='#9d9d9d'
                             />
-                            <p className='text-[#9d9d9d] text-xs capitalize'>{props.user?.firstName}'s workspace</p>
+                            <p className='text-[#bdbdbd] text-xs capitalize'>{props.user?.firstName}'s workspace</p>
                         </span>
                     </div>
                 </div>

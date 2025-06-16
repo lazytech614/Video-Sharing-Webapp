@@ -24,7 +24,7 @@ const WorkspaceForm = () => {
       />
       <Button
         type='submit'
-        className='text-sm w-full mt-2'
+        className='text-sm w-full mt-2 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white'
         disabled={isPending}
       >
         <Loader state={isPending}>
