@@ -1,4 +1,4 @@
-# 🎥 Video Sharing Webapp
+# 🎥 Nuevue - A Video Sharing Webapp
 
 A modern, full-featured video sharing platform built with Next.js that allows users to upload, share, and discover videos in a YouTube-inspired interface.
 
