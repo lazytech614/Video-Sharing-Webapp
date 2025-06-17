@@ -1,3 +1,5 @@
+import Spinner, { SpinnerVariant } from "./spinner";
+
 interface LoaderProps {
   state: boolean;
   className?: string;

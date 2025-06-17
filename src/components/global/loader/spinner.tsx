@@ -1,4 +1,4 @@
-type SpinnerVariant = 'default' | 'dots' | 'pulse' | 'bars' | 'ring' | 'gradient';
+export type SpinnerVariant = 'default' | 'dots' | 'pulse' | 'bars' | 'ring' | 'gradient';
 
 interface SpinnerProps {
   variant?: SpinnerVariant;
